@@ -109,6 +109,11 @@ int Array<DataType>::find(DataType item, int index) {
     return -1;
 }
 
+/***************************************************************************
+* @Description xóa phần tử tại vị trí index.
+* @param index: vị trí cần xóa.
+* @return true nếu xóa thành công, false nếu vị trí không hợp lệ.
+****************************************************************************/
 template<class DataType>
 bool Array<DataType>::removeAt(int index) {
     if (index < 0 || index >= _iLength)
@@ -120,6 +125,11 @@ bool Array<DataType>::removeAt(int index) {
     return true;
 }
 
+/***************************************************************************
+* @Description xóa tất cả phần tử có giá trị bằng với item.
+* @param item: giá trị phần tử cần xóa.
+* @return true nếu xóa thành công, false nếu không xóa phần tử nào.
+****************************************************************************/
 template<class DataType>
 bool Array<DataType>::removeAll(DataType item) {
     int _iIdx = this->find(item);
