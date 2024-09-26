@@ -10,5 +10,5 @@ Giảng viên:
 
 ## Lưu trữ
 - **My notes**:  
-- **Các bài Lab**:  
+- **Các bài Lab**: Thư mục [Lab](/Lab)  
 - **Đồ án**:  
