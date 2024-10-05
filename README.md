@@ -9,6 +9,6 @@ Giảng viên:
 **Phân bố điểm**:
 
 ## Lưu trữ
-- **My notes**:  
+- **Ghi chú**:  
 - **Các bài Lab**: Thư mục [Lab](/Lab)  
 - **Đồ án**:  
