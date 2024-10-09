@@ -45,7 +45,7 @@ public:
     int inputSizeArray();           // Nhập số lượng phần tử mảng
     void inputItemArray(int size);  // Nhập các phần tử của mảng
     void outputArray();             // In các phần tử của mảng
-    void removeItem(int size);      // Xóa phần tử trong mảng
+    void removeItem();              // Xóa phần tử trong mảng
     void run();                     // Hàm điều khiển chính của chương trình
 };
 
@@ -197,7 +197,7 @@ int Program::inputSizeArray() {
     string strInput = "";
 
     setTextColor(BLUE);
-    cout << "[+] Nhập số lượng phần tử của mảng: ";
+    cout << "≫ Nhập số lượng phần tử của mảng: ";
 
     setTextColor(YELLOW);
     while (true) {
@@ -239,7 +239,7 @@ void Program::inputItemArray(int size) {
     string strInput = "";
 
     setTextColor(BLUE);
-    cout << "[+] Nhập các phần tử của mảng: ";
+    cout << "≫ Nhập các phần tử của mảng: ";
 
     setTextColor(YELLOW);
     while (true) {
@@ -277,7 +277,7 @@ void Program::inputItemArray(int size) {
 ****************************************************************************/
 void Program::outputArray() {
     setTextColor(BLUE);
-    cout << "[-] Mảng hiện tại: ";
+    cout << "≫ Mảng hiện tại: ";
 
     setTextColor(YELLOW);
     _array.print();
@@ -285,17 +285,16 @@ void Program::outputArray() {
 
 /***************************************************************************
 * @Description nhập vào số cần xóa.
-* @param size: số lượng phần tử của mảng.
 * @attention: ràng buộc dữ liệu chỉ được nhập số.
 * @attention: thực hiện xóa, in ra thông náo nếu xóa thành công/không thành công.
 ****************************************************************************/
-void Program::removeItem(int size) {
+void Program::removeItem() {
     char cKey;
     int iItem;
     string strInput = "";
 
     setTextColor(BLUE);
-    cout << "[+] Nhập phần tử cần xóa: ";
+    cout << "≫ Nhập phần tử cần xóa: ";
 
     setTextColor(YELLOW);
     while (true) {
@@ -322,12 +321,12 @@ void Program::removeItem(int size) {
     iItem = stoi(strInput);
     if (_array.removeAll(iItem)) {
         setTextColor(GREEN);
-        cout << "[-] Đã xóa thành công!" << endl;
+        cout << "≫ Đã xóa thành công!" << endl;
     }
 
     else {
         setTextColor(RED);
-        cout << "[-] Không có phần tử này trong mảng!" << endl;
+        cout << "≫ Không có phần tử này trong mảng!" << endl;
     }
 }
 
@@ -343,11 +342,10 @@ void Program::run() {
     inputItemArray(iSize);
 
     outputArray();
-    removeItem(iSize);
+    removeItem();
     outputArray();
 
     setTextColor(WHITE);
-
-    cout << "Nhấn phím bất kỳ để đóng chương trình!";
+    cout << "≫ Nhấn phím bất kỳ để đóng chương trình!";
     getch();
 }
