@@ -12,3 +12,4 @@ Giảng viên:
 - **Ghi chú**:  
 - **Các bài Lab**: Thư mục [Lab](/Lab)  
 - **Đồ án**:  
+- **Khác**: Thư mục [Khac](/Khac/)
