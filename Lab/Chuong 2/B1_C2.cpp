@@ -37,7 +37,7 @@ public:
 // Lớp chương trình
 class Program {
 private:
-    Array<int> _array;              // Đối tượng mảng để lưu trữ các phần tử
+    Array<int> arrInt;              // Đối tượng mảng để lưu trữ các phần tử
     int countDigit(string input);   // Đếm số phần tử số hợp lệ trong chuỗi đầu vào
     void setTextColor(int color);   // Đổi màu chữ hiển thị trên console
 
@@ -168,9 +168,9 @@ bool Array<DataType>::removeAll(DataType item) {
 ****************************************************************************/
 int Program::countDigit(string input) {
     int iItem, iCount = 0;
-    stringstream inStream(input);
+    stringstream ssInput(input);
 
-    while (inStream >> iItem) 
+    while (ssInput >> iItem) 
         iCount++;   // Đếm số lượng phần tử hợp lệ
 
     return iCount;
@@ -266,9 +266,9 @@ void Program::inputItemArray(int size) {
         }
     }
 
-    stringstream inStream(strInput);
-    while (inStream >> iItem)
-        _array.add(iItem);      // Thêm từng phần tử vào mảng
+    stringstream ssInput(strInput);
+    while (ssInput >> iItem)
+        arrInt.add(iItem);      // Thêm từng phần tử vào mảng
 }
 
 /***************************************************************************
@@ -280,7 +280,7 @@ void Program::outputArray() {
     cout << "≫ Mảng hiện tại: ";
 
     setTextColor(YELLOW);
-    _array.print();
+    arrInt.print();
 }
 
 /***************************************************************************
@@ -319,7 +319,7 @@ void Program::removeItem() {
     }
 
     iItem = stoi(strInput);
-    if (_array.removeAll(iItem)) {
+    if (arrInt.removeAll(iItem)) {
         setTextColor(GREEN);
         cout << "≫ Đã xóa thành công!" << endl;
     }
