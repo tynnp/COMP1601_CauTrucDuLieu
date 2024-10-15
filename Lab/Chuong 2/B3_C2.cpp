@@ -298,7 +298,8 @@ void Program::inputItemArray(int size) {
         cKey = _getch();
 
         // Kiểm tra điều kiện nhập hợp lệ
-        if ((isdigit(cKey) || (cKey == ' ' && strInput.back() != '-') || (cKey == '-' && (strInput.empty() || strInput.back() == ' '))) && countDigit(strInput) < size) {
+        if ((isdigit(cKey) || (cKey == ' ' && strInput.back() != '-') || (cKey == '-' && (strInput.empty() || strInput.back() == ' '))) 
+        && (countDigit(strInput) < size) || isdigit(strInput.back()) && isdigit(cKey)) {
             cout << cKey;
             strInput += cKey;
         }
