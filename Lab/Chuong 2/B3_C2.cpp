@@ -28,7 +28,7 @@ public:
     void add(DataType item);    // Thêm phần tử item và mảng
     void print();               // In mảng
     void clear();               // Xóa mảng
-    int size();                // Lấy số phần tử của mảng
+    int size();                 // Lấy số phần tử của mảng
 
     int find(DataType item, int index = 0); // Tìm chỉ số của phần tử item từ chỉ số index
     void removeAtIndex(int index);          // Xoá phần tử tại vị trí index
