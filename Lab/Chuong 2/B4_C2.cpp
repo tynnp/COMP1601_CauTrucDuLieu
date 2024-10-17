@@ -30,11 +30,13 @@ public:
     void clear();               // Xóa mảng
     int size();                 // Lấy số phần tử của mảng
 
-    int find(DataType item, int index = 0); // Tìm chỉ số của phần tử item từ chỉ số index
-    void removeAtIndex(int index);          // Xoá phần tử tại vị trí index
-    bool removeAll(DataType item);          // Xoá hết phần tử có giá trị item
-    DataType getAt(int index);              // Lấy giá trị của phần tử tại vị trí index
-    void sortAsc();                         // Hàm sắp xếp tăng dần mảng
+    int find(DataType item, int index = 0);                                         // Tìm chỉ số của phần tử item từ chỉ số index
+    void removeAtIndex(int index);                                                  // Xoá phần tử tại vị trí index
+    bool removeAll(DataType item);                                                  // Xoá hết phần tử có giá trị item
+    DataType getAt(int index);                                                      // Lấy giá trị của phần tử tại vị trí index
+    void insertionSort(bool (*compare)(DataType itemA, DataType itemB) == nullptr); // Hàm sắp xếp theo thuật toán sắp xếp chèn với điều kiện so sánh là hàm compare
+    void selectionSort(bool (*compare)(DataType itemA, DataType itemB) == nullptr); // Hàm sắp xếp theo thuật toán sắp xếp chọn với điều kiện so sánh là hàm compare
+    void quickSort(bool (*compare)(DataType itemA, DataType itemB) == nullptr);     // Hàm sắp xếp theo thuật toán sắp xếp nhanh với điều kiện so sánh là hàm compare
 };
 
 // Lớp môn học
@@ -97,6 +99,7 @@ private:
     void setTextColor(int color);   // Đổi màu chữ hiển thị trên console
 
 public:
+
     void run();
 };
 
@@ -231,14 +234,27 @@ DataType Array<DataType>::getAt(int index) {
 }
 
 /***************************************************************************
-* @Description hàm sắp xếp tăng dần.
+* @Description hàm sắp xếp theo điều kiện truyền vào, mặc định là tăng dần.
+* @param compare: Con trỏ đến hàm so sánh hai phần tử kiểu DataType. 
+* @attention: Hàm compare nhận vào hai đối tượng itemA và itemB để thực hiện so sánh.
 * @attention: sắp xếp theo thuật toán sắp xếp chèn (insertion sort).
 ****************************************************************************/
 template<class DataType>
-void Array<DataType>::sortAsc() {
+void Array<DataType>::insertionSort(bool (*compare)(DataType itemA, DataType itemB)) {
     for (int i = 1; i < _iSize; i++) {
         int j = i;
-        while (j > 0 && _items[j-1] > _items[j]) {
+
+        while (j > 0) {
+            bool bCondition;
+
+            if (compare == nullptr)
+                bCondition = _items[j-1] > _items[j];
+            else 
+                bCondition = !compare(_items[j-1], _items[j]);
+
+            if (!bCondition)
+                break;
+            
             swap(_items[j-1], _items[j]);
             j--;
         }
