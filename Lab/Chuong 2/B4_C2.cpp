@@ -245,6 +245,135 @@ void Array<DataType>::sortAsc() {
     }
 }
 
+
+
+
+Subject::Subject() {
+    _strSubjectID = _strSubjectName = "";
+    _iCredits = _fScore = 0;
+}
+
+Subject::Subject(string subjectID, string subjectName, int credits, float score) {
+    _strSubjectID = subjectID;
+    _strSubjectName = subjectName;
+    _iCredits = credits;
+    _fScore = score;
+}
+
+Subject::Subject(const Subject &other) {
+    _strSubjectID = other._strSubjectID;
+    _strSubjectName = other._strSubjectName;
+    _iCredits = other._iCredits;
+    _fScore = other._fScore;
+}
+
+Subject::~Subject() {
+    // Không cần định nghĩa
+}
+
+string Subject::getSubjectID() {
+    return _strSubjectID;
+}
+
+void Subject::setSubjectID(string subjectID) {
+    _strSubjectID = subjectID;
+}
+
+string Subject::getSubjectName() {
+    return _strSubjectName;
+}
+
+void Subject::setSubjectName(string subjectName) {
+    _strSubjectName = subjectName;
+}
+
+int Subject::getCredits() {
+    return _iCredits;
+}
+
+void Subject::setCredits(int credits) {
+    _iCredits = credits;
+}
+
+float Subject::getScore() {
+    return _fScore;
+}
+
+void Subject::setScore(float score) {
+    _fScore = score;
+}
+
+
+
+
+
+Student::Student() {
+    _strStudentID = _strFullName = _strBirthDate = "";
+    _iSubjectCount = 0;
+}
+
+Student::Student(string studentID, string fullName, string birthDate, Array<Subject> subjects, int subjectCount) {
+    _strStudentID = studentID;
+    _strFullName = fullName;
+    _strBirthDate = birthDate;
+    _arrSubjects = subjects;
+    _iSubjectCount = subjectCount;
+}
+
+Student::Student(const Student &other) {
+    _strStudentID = other._strStudentID;
+    _strFullName = other._strFullName;
+    _strBirthDate = other._strBirthDate;
+    _arrSubjects = other._arrSubjects;
+    _iSubjectCount = other._iSubjectCount;
+}
+
+Student::~Student() {
+    // Không cần định nghĩa
+}
+
+string Student::getStudentID() {
+    return _strStudentID;
+}
+
+void Student::setStudentID(string studentID) {
+    _strStudentID = studentID;
+}
+
+string Student::getFullName() {
+    return _strFullName;
+}
+
+void Student::setFullName(string fullName) {
+    _strFullName = fullName;
+}
+
+string Student::getBirthDate() {
+    return _strBirthDate;
+}
+
+void Student::setBirthDate(string birthDate) {
+    _strBirthDate = birthDate;
+}
+
+Array<Subject> Student::getSubjects() {
+    return _arrSubjects;
+}
+
+void Student::setSubjects(Array<Subject> subjects) {
+    _arrSubjects = subjects;
+}
+
+int Student::getSubjectCount() {
+    return _iSubjectCount;
+}
+
+void Student::setSubjectCount(int subjectCount) {
+    _iSubjectCount = subjectCount;
+}
+
+
+ 
 /***************************************************************************
 * @Description đếm các số có trong chuỗi input.
 * @param input: chuỗi chứa các số.
