@@ -30,13 +30,14 @@ public:
     void clear();               // Xóa mảng
     int size();                 // Lấy số phần tử của mảng
 
-    int find(DataType item, int index = 0);                                         // Tìm chỉ số của phần tử item từ chỉ số index
-    void removeAtIndex(int index);                                                  // Xoá phần tử tại vị trí index
-    bool removeAll(DataType item);                                                  // Xoá hết phần tử có giá trị item
-    DataType getAt(int index);                                                      // Lấy giá trị của phần tử tại vị trí index
-    void insertionSort(bool (*compare)(DataType itemA, DataType itemB) == nullptr); // Hàm sắp xếp theo thuật toán sắp xếp chèn với điều kiện so sánh là hàm compare
-    void selectionSort(bool (*compare)(DataType itemA, DataType itemB) == nullptr); // Hàm sắp xếp theo thuật toán sắp xếp chọn với điều kiện so sánh là hàm compare
-    void quickSort(bool (*compare)(DataType itemA, DataType itemB) == nullptr);     // Hàm sắp xếp theo thuật toán sắp xếp nhanh với điều kiện so sánh là hàm compare
+    int find(DataType item, int index = 0);                                                         // Tìm chỉ số của phần tử item từ chỉ số index
+    void removeAtIndex(int index);                                                                  // Xoá phần tử tại vị trí index
+    bool removeAll(DataType item);                                                                  // Xoá hết phần tử có giá trị item
+    DataType getAt(int index);                                                                      // Lấy giá trị của phần tử tại vị trí index
+    void insertionSort(bool (*compare)(DataType itemA, DataType itemB) = nullptr);                  // Hàm sắp xếp theo thuật toán sắp xếp chèn với điều kiện so sánh là hàm compare
+    void selectionSort(bool (*compare)(DataType itemA, DataType itemB) = nullptr);                  // Hàm sắp xếp theo thuật toán sắp xếp chọn với điều kiện so sánh là hàm compare
+    void quickSort(bool (*compare)(DataType itemA, DataType itemB) = nullptr);                      // Hàm sắp xếp theo thuật toán sắp xếp nhanh với điều kiện so sánh là hàm compare
+    int binarySearch(DataType item, bool (*compare)(DataType itemA, DataType itemB) = nullptr);     // Hàm tìm kiếm nhị phân với hàm điều kiện được truyền vào
 };
 
 // Lớp môn học
@@ -104,8 +105,30 @@ public:
 };
 
 int main() {
-    Program program;
-    program.run();  // Chạy chương trình
+    // Program program;
+    // program.run();  // Chạy chương trình
+
+    int n;
+    Array<int> arr;
+    
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        int x; 
+        cin >> x;
+        arr.add(x);
+    }
+    
+    // Sắp xếp tăng dần, mặc định không truyền điều kiện thì là nullptr
+    arr.insertionSort();
+    arr.print();
+    
+    // Tương tự như truyền hàm soSanh, nhưng ở đây viết thẳng 1 lamba vào thay vì viết hàm
+    arr.insertionSort([] (int a, int b) {
+        return a > b;
+    });
+    
+    arr.print();
+    
     return 0;
 }
 
@@ -241,20 +264,15 @@ DataType Array<DataType>::getAt(int index) {
 ****************************************************************************/
 template<class DataType>
 void Array<DataType>::insertionSort(bool (*compare)(DataType itemA, DataType itemB)) {
+    if (compare == nullptr) {
+        compare = [] (DataType itemA, DataType itemB) {
+            return itemA < itemB;
+        };
+    }
+    
     for (int i = 1; i < _iSize; i++) {
         int j = i;
-
-        while (j > 0) {
-            bool bCondition;
-
-            if (compare == nullptr)
-                bCondition = _items[j-1] > _items[j];
-            else 
-                bCondition = !compare(_items[j-1], _items[j]);
-
-            if (!bCondition)
-                break;
-            
+        while (j > 0 && !compare(_items[j-1], _items[j])) {
             swap(_items[j-1], _items[j]);
             j--;
         }
@@ -262,6 +280,31 @@ void Array<DataType>::insertionSort(bool (*compare)(DataType itemA, DataType ite
 }
 
 
+
+template<class DataType>
+int Array<DataType>::binarySearch(DataType item, bool (*compare)(DataType itemA, DataType itemB)) {
+    if (compare == nullptr) {
+        compare = [](DataType itemA, DataType itemB) {
+            return itemA < itemB;
+        };
+    }
+
+    int iLeft = 0, iRight = _iSize - 1;
+
+    while (iLeft <= iRight) {
+        int iMid = iLeft + (iRight - iLeft) / 2;
+
+        if (!compare(_items[iMid], item) && !compare(item, _items[iMid]))
+            return iMid;
+
+        if (compare(_items[iMid], item))
+            iLeft = iMid + 1;
+        else 
+            iRight = iMid - 1;
+    }
+
+    return -1;
+}
 
 
 Subject::Subject() {
