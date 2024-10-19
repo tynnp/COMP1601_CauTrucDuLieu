@@ -19,8 +19,9 @@ enum Color {
 template<class DataType>
 class Array {
 private:
-    DataType* _items;   // Con trỏ lưu mảng phần tử
-    int _iSize;         // Số lượng phần tử hiện tại của mảng
+    DataType* _items;                                                                                           // Con trỏ lưu mảng phần tử
+    int _iSize;                                                                                                 // Số lượng phần tử hiện tại của mảng
+    void recursiveQuickSort(int left, int right, bool (*compare)(DataType itemA, DataType itemB) = nullptr);    // Hàm đệ quy để áp dụng trong thuật toán quick sort
 
 public: 
     Array();                    // Khởi tạo mặc định
@@ -100,35 +101,19 @@ private:
     void setTextColor(int color);   // Đổi màu chữ hiển thị trên console
 
 public:
-
+    void inputStudentList();            // Nhập danh sách sinh viên
+    void updateStudentNameByID();       // Tìm kiếm sinh viên theo mã số và sửa họ tên
+    void sortStudentByNameDesc();       // Sắp xếp các sinh viên theo họ tên giảm dần
+    void removeStudentByName();         // Tìm kiếm sinh viên theo mã số và xóa sinh viên đó khỏi danh sách
+    void sortStudentByAVGScoreAsc();    // Sắp xếp danh sách sinh viên tăng dần theo điểm trung bình
+    void printScholarshipStudents();    // In ra danh sách tên của các sinh viên có học bổng
+    void sortStudentsByBirthYearAsc();  // Sắp xếp danh sách tăng dần theo năm sinh
     void run();
 };
 
 int main() {
     // Program program;
     // program.run();  // Chạy chương trình
-
-    int n;
-    Array<int> arr;
-    
-    cin >> n;
-    for (int i = 0; i < n; i++) {
-        int x; 
-        cin >> x;
-        arr.add(x);
-    }
-    
-    // Sắp xếp tăng dần, mặc định không truyền điều kiện thì là nullptr
-    arr.insertionSort();
-    arr.print();
-    
-    // Tương tự như truyền hàm soSanh, nhưng ở đây viết thẳng 1 lamba vào thay vì viết hàm
-    arr.insertionSort([] (int a, int b) {
-        return a > b;
-    });
-    
-    arr.print();
-    
     return 0;
 }
 
@@ -279,12 +264,71 @@ void Array<DataType>::insertionSort(bool (*compare)(DataType itemA, DataType ite
     }
 }
 
+template<class DataType>
+void Array<DataType>::selectionSort(bool (*compare)(DataType itemA, DataType itemB)) {
+    if (compare == nullptr) {
+        compare = [] (DataType itemA, DataType itemB) {
+            return itemA < itemB;
+        };
+    }
+
+    for (int i = 0; i < _iSize; i++) {
+        int iMinIdx = i;
+        for (int j = i + 1; j < _iSize; j++) 
+            if (compare(_items[j], _items[iMinIdx]))
+                iMinIdx = j;
+        if (iMinIdx != i)
+            swap(_items[iMinIdx], _items[i]);
+    }
+} 
+
+template<class DataType>
+void Array<DataType>::recursiveQuickSort(int left, int right,bool (*compare)(DataType itemA, DataType itemB)) {
+    if (left >= right)
+        return;
+
+    if (compare == nullptr) {
+        compare = [] (DataType itemA, DataType itemB) {
+            return itemA < itemB;
+        };
+    }
+
+    DataType x = _items[(left + right) / 2];
+    int i = left, j = right;
+
+    while (i < j) {
+        while (compare(_items[i], x)) i++;
+        while (compare(x, _items[j])) j--;
+
+        if (i <= j) {
+            swap(_items[i], _items[j]);
+            i++, j--;
+        }
+    } 
+
+    recursiveQuickSort(left, j, compare);
+    recursiveQuickSort(i, right, compare);
+}
+
+
+
+template<class DataType>
+void Array<DataType>::quickSort(bool (*compare)(DataType itemA, DataType itemB)) {
+    if (compare == nullptr) {
+        compare = [] (DataType itemA, DataType itemB) {
+            return itemA < itemB;
+        };
+    }
+
+    recursiveQuickSort(0, _iSize-1, compare);
+}
+
 
 
 template<class DataType>
 int Array<DataType>::binarySearch(DataType item, bool (*compare)(DataType itemA, DataType itemB)) {
     if (compare == nullptr) {
-        compare = [](DataType itemA, DataType itemB) {
+        compare = [] (DataType itemA, DataType itemB) {
             return itemA < itemB;
         };
     }
