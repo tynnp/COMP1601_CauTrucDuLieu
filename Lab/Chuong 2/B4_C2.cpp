@@ -2,6 +2,7 @@
 #include <sstream>
 #include <cctype>
 #include <string>
+#include <regex>
 #include <conio.h>
 #include <windows.h>
 using namespace std;
@@ -24,12 +25,13 @@ private:
     void recursiveQuickSort(int left, int right, bool (*compare)(DataType itemA, DataType itemB) = nullptr);    // Hàm đệ quy để áp dụng trong thuật toán quick sort
 
 public: 
-    Array();                    // Khởi tạo mặc định
-    ~Array();                   // Hàm hủy
-    void add(DataType item);    // Thêm phần tử item và mảng
-    void print();               // In mảng
-    void clear();               // Xóa mảng
-    int size();                 // Lấy số phần tử của mảng
+    Array();                                // Khởi tạo mặc định
+    Array(const Array<DataType> &other);    // Sao chép
+    ~Array();                               // Hàm hủy
+    void add(DataType item);                // Thêm phần tử item và mảng
+    void print();                           // In mảng
+    void clear();                           // Xóa mảng
+    int size();                             // Lấy số phần tử của mảng
 
     int find(DataType item, int index = 0);                                                         // Tìm chỉ số của phần tử item từ chỉ số index
     void removeAtIndex(int index);                                                                  // Xoá phần tử tại vị trí index
@@ -96,9 +98,12 @@ public:
 // Lớp chương trình
 class Program {
 private:
-    Array<int> _array;              // Đối tượng mảng để lưu trữ các phần tử
+    Array<Student> _array;          // Đối tượng mảng để lưu trữ các phần tử
     int countDigit(string input);   // Đếm số phần tử số hợp lệ trong chuỗi đầu vào
     void setTextColor(int color);   // Đổi màu chữ hiển thị trên console
+    bool isValidDate(string date);  // Hàm kiểm tra ngày tháng năm có hợp lệ không
+    Subject inputSubject();         // Nhập môn học
+    Student inputStudent();         // Nhập sinh viên
 
 public:
     void inputStudentList();            // Nhập danh sách sinh viên
@@ -112,8 +117,8 @@ public:
 };
 
 int main() {
-    // Program program;
-    // program.run();  // Chạy chương trình
+    Program program;
+    program.run();  // Chạy chương trình
     return 0;
 }
 
@@ -124,7 +129,17 @@ int main() {
 template<class DataType>
 Array<DataType>::Array() {
     _iSize = 0;
-    _items = new DataType[1000];    // Giới hạn 1000 phần tử
+    _items = new DataType[1000];    // Cấp phát 1000 phần tử
+}
+
+template<class DataType>
+Array<DataType>::Array(const Array<DataType> &other) {
+    delete[] _items;
+    _iSize = other._iSize;
+    _items = new DataType[_iSize];
+
+    for (int i = 0; i < other._iSize; i++) 
+        _items[i] = other._items[i];
 }
 
 /***************************************************************************
@@ -407,9 +422,6 @@ void Subject::setScore(float score) {
 }
 
 
-
-
-
 Student::Student() {
     _strStudentID = _strFullName = _strBirthDate = "";
     _iSubjectCount = 0;
@@ -503,6 +515,344 @@ void Program::setTextColor(int color) {
     SetConsoleTextAttribute(hConsole, color);   // Đặt màu chữ trên console
 }
 
+bool Program::isValidDate(string date) {
+    regex datePattern(R"(^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\d{4}$)");
+
+    if (!regex_match(date, datePattern))
+        return false;
+
+    int iDay, iMonth, iYear;
+    if (sscanf(date.c_str(), "%d/%d/%d", &iDay, &iMonth, &iYear) != 3)
+        return false;
+
+    int arrDays[] = {0, 31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    arrDays[2] = (iYear % 400 == 0 || (iYear % 4 == 0 && iYear % 100 != 0)) ? 29 : 28;
+
+    if (iDay > arrDays[iMonth])
+        return false;
+
+    return true;
+}
+
+Subject Program::inputSubject() {
+    string strSubjectID, strSubjectName;
+    int iCredits;
+    float fScore;
+    char cKey;
+    string strInput;
+
+    // Nhập mã môn học
+    setTextColor(BLUE);
+    cout << "≫ Nhập mã môn học: ";
+
+    setTextColor(YELLOW);
+    while (true) {
+        cKey = _getch();
+
+        if (isalnum(cKey)) {
+            cout << cKey;
+            strSubjectID += cKey;
+        }
+
+        else if (cKey == 8) {
+            if (!strSubjectID.empty()) {
+                cout << "\b \b";
+                strSubjectID.pop_back();
+            }
+        }
+
+        else if (cKey == '\r' && !strSubjectID.empty()) {
+            cout << endl;
+            break;
+        }
+    }
+
+    // Nhập tên môn học
+    setTextColor(BLUE);
+    cout << "≫ Nhập tên môn học: ";
+    
+    setTextColor(YELLOW);
+    while (true) {
+        cKey = _getch();
+
+        if (isalnum(cKey) || cKey == ' ') {
+            cout << cKey;
+            strSubjectName += cKey;
+        }
+
+        else if (cKey == 8) {
+            if (!strSubjectName.empty()) {
+                cout << "\b \b";
+                strSubjectName.pop_back();
+            }
+        }
+
+        else if (cKey == '\r' && !strSubjectName.empty()) {
+            cout << endl;
+            break;
+        }
+    }
+    
+    // Nhập số tín chỉ
+    setTextColor(BLUE);
+    cout << "≫ Nhập số tín chỉ (1-5): ";
+
+    setTextColor(YELLOW);
+    while (true) {
+        cKey = _getch();
+
+        if (isdigit(cKey) && strInput.empty() && cKey >= '1' && cKey <= '5') {
+            cout << cKey;
+            strInput += cKey;
+        }
+
+        else if (cKey == 8) {
+            if (!strInput.empty()) {
+                cout << "\b \b";
+                strInput.pop_back();
+            }
+        }
+
+        else if (cKey == '\r' && !strInput.empty()) {
+            cout << endl;
+            break;
+        }
+    }
+    iCredits = stoi(strInput);
+    strInput.clear();
+
+    // Nhập điểm
+    setTextColor(BLUE);
+    cout << "≫ Nhập điểm (0-10): ";
+
+    setTextColor(YELLOW);
+    while (true) {
+        cKey = _getch();
+
+        if (isdigit(cKey) || (isdigit(strInput.back()) && cKey == '.')) {
+            cout << cKey;
+            strInput += cKey;
+        }
+
+        else if (cKey == 8) {
+            if (!strInput.empty()) {
+                cout << "\b \b";
+                strInput.pop_back();
+            }
+        }
+
+        else if (cKey == '\r' && !strInput.empty() && strInput.back() != '.' && stof(strInput) >= 0 && stof(strInput) <= 10) {
+            cout << endl;
+            break;
+        }
+    }
+
+    fScore = stof(strInput);
+    strInput.clear();
+    
+    Subject subject(strSubjectID, strSubjectName, iCredits, fScore);
+    return subject;
+}
+
+Student Program::inputStudent() {
+    string strStudentID, strFullName, strBirthDate;
+    Array<Subject> arrSubjects;
+    int iSubjectCount;
+
+    char cKey;
+    string strInput;
+
+    // Nhập mã sinh viên
+    setTextColor(BLUE);
+    cout << "≫ Nhập mã sinh viên (11 ký tự): ";
+
+    setTextColor(YELLOW);
+    while (true) {
+        cKey = _getch();
+
+        if (isalnum(cKey) && strStudentID.size() < 11) {
+            cout << cKey;
+            strStudentID += cKey;
+        }
+
+        else if (cKey == 8) {
+            if (!strStudentID.empty()) {
+                cout << "\b \b";
+                strStudentID.pop_back();
+            }
+        }
+
+        else if (cKey == '\r' && !strStudentID.empty() && strStudentID.size() == 11) {
+            cout << endl;
+            break;
+        }
+    }
+
+    // Nhập tên sinh viên
+    setTextColor(BLUE);
+    cout << "≫ Nhập tên sinh viên: ";
+    
+    setTextColor(YELLOW);
+    while (true) {
+        cKey = _getch();
+
+        if (isalpha(cKey) || cKey == ' ') {
+            cout << cKey;
+            strFullName += cKey;
+        }
+
+        else if (cKey == 8) {
+            if (!strFullName.empty()) {
+                cout << "\b \b";
+                strFullName.pop_back();
+            }
+        }
+
+        else if (cKey == '\r' && !strFullName.empty()) {
+            cout << endl;
+            break;
+        }
+    }
+
+    // Nhập ngày sinh
+    setTextColor(BLUE);
+    cout << "≫ Nhập ngày sinh (dd/mm/yyyy): ";
+
+    setTextColor(YELLOW);
+    while (true) {
+        cKey = _getch();
+
+        if (isdigit(cKey) || cKey == '/') {
+            cout << cKey;
+            strBirthDate += cKey;
+        }
+
+        else if (cKey == 8) {
+            if (!strBirthDate.empty()) {
+                cout << "\b \b";
+                strBirthDate.pop_back();
+            }
+        }
+
+        else if (cKey == '\r' && isValidDate(strBirthDate)) {
+            cout << endl;
+            break;
+        }
+    }
+
+    // Nhập số môn học
+    setTextColor(BLUE);
+    cout << "≫ Nhập số môn học: ";
+
+    setTextColor(YELLOW);
+    while (true) {
+        cKey = _getch();
+
+        if (isdigit(cKey) && cKey >= '1') {
+            cout << cKey;
+            strInput += cKey;
+        }
+
+        else if (cKey == 8) {
+            if (!strInput.empty()) {
+                cout << "\b \b";
+                strInput.pop_back();
+            }
+        }
+
+        else if (cKey == '\r' && !strInput.empty()) {
+            cout << endl;
+            break;
+        }
+    }
+    iSubjectCount = stoi(strInput);
+    strInput.clear();
+
+    for (int i = 1; i <= iSubjectCount; i++) {
+        setTextColor(YELLOW);
+        cout << "≫ Nhập thông tin môn học thứ " << i << "\n";
+
+        Subject subject = inputSubject();
+        arrSubjects.add(subject);
+        
+        setTextColor(GREEN);
+        cout << "≫ Đã thêm thành công môn học " + subject.getSubjectName() + "!\n";
+    }
+
+    Student student(strStudentID, strFullName, strBirthDate, arrSubjects, iSubjectCount);
+    return student;
+}
+
+void Program::inputStudentList() {
+    int iSize;
+    char cKey;
+    string strInput;
+
+    setTextColor(BLUE);
+    cout << "≫ Nhập số sinh viên: ";
+
+    setTextColor(YELLOW);
+    while (true) {
+        cKey = _getch();
+
+        if (isdigit(cKey) && cKey >= '1') {
+            cout << cKey;
+            strInput += cKey;
+        }
+
+        else if (cKey == 8) {
+            if (!strInput.empty()) {
+                cout << "\b \b";
+                strInput.pop_back();
+            }
+        }
+
+        else if (cKey == '\r' && !strInput.empty()) {
+            cout << endl;
+            break;
+        }
+    }
+
+    iSize = stoi(strInput);
+    strInput.clear();
+
+    for (int i = 1; i <= iSize; i++) {
+        setTextColor(YELLOW);
+        cout << "≫ Nhập thông tin sinh viên thứ " << i << "\n";
+
+        Student student = inputStudent();
+        _array.add(student);
+
+        setTextColor(GREEN);
+        cout << "≫ Đã thêm sinh viên " + student.getFullName() + "!\n";
+    }
+}
+
+void Program::updateStudentNameByID() {
+
+}
+
+void Program::sortStudentByNameDesc() {
+
+}
+
+void Program::removeStudentByName() {
+
+}
+
+void Program::sortStudentByAVGScoreAsc() {
+
+}
+
+void Program::printScholarshipStudents() {
+
+}
+
+void Program::sortStudentsByBirthYearAsc() {
+
+}
+
+
 /***************************************************************************
 * @Description hàm chạy chương trình.
 * @attention: gọi đến các hàm thành phần của chương trình.
@@ -511,6 +861,9 @@ void Program::run() {
     setTextColor(WHITE);    
     SetConsoleOutputCP(CP_UTF8);    // Thiết lập mã hóa để console hỗ trợ tiếng Việt
 
+    inputStudentList();
+
+    setTextColor(WHITE);
     cout << "≫ Nhấn phím bất kỳ để đóng chương trình!";
     getch();
 }
