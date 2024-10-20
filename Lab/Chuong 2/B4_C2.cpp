@@ -22,12 +22,12 @@ class Array {
 private:
     DataType* _items;                                                                                           // Con trỏ lưu mảng phần tử
     int _iSize;                                                                                                 // Số lượng phần tử hiện tại của mảng
-    void recursiveQuickSort(int left, int right, bool (*compare)(DataType itemA, DataType itemB) = nullptr);    // Hàm đệ quy để áp dụng trong thuật toán quick sort
 
 public: 
     Array();                                // Khởi tạo mặc định
     Array(const Array<DataType> &other);    // Sao chép
     ~Array();                               // Hàm hủy
+    
     void add(DataType item);                // Thêm phần tử item và mảng
     void print();                           // In mảng
     void clear();                           // Xóa mảng
@@ -36,11 +36,9 @@ public:
     int find(DataType item, int index = 0);                                                         // Tìm chỉ số của phần tử item từ chỉ số index
     void removeAtIndex(int index);                                                                  // Xoá phần tử tại vị trí index
     bool removeAll(DataType item);                                                                  // Xoá hết phần tử có giá trị item
-    DataType getAt(int index);                                                                      // Lấy giá trị của phần tử tại vị trí index
-    void insertionSort(bool (*compare)(DataType itemA, DataType itemB) = nullptr);                  // Hàm sắp xếp theo thuật toán sắp xếp chèn với điều kiện so sánh là hàm compare
-    void selectionSort(bool (*compare)(DataType itemA, DataType itemB) = nullptr);                  // Hàm sắp xếp theo thuật toán sắp xếp chọn với điều kiện so sánh là hàm compare
-    void quickSort(bool (*compare)(DataType itemA, DataType itemB) = nullptr);                      // Hàm sắp xếp theo thuật toán sắp xếp nhanh với điều kiện so sánh là hàm compare
-    int binarySearch(DataType item, bool (*compare)(DataType itemA, DataType itemB) = nullptr);     // Hàm tìm kiếm nhị phân với hàm điều kiện được truyền vào
+    DataType &getAt(int index);                                                                     // Lấy giá trị của phần tử tại vị trí index
+
+    Array<DataType> &operator = (const Array<DataType> &other);                                     // Sao chép
 };
 
 // Lớp môn học
@@ -65,6 +63,8 @@ public:
     void setCredits(int credits);               // Hàm thiết lập số tín chỉ
     float getScore();                           // Hàm lấy điểm
     void setScore(float score);                 // Hàm thiết lập điểm
+
+    friend ostream &operator << (ostream &out, Subject other);  // Toán tử xuất
 };
 
 
@@ -93,6 +93,10 @@ public:
     void setSubjects(Array<Subject> subjects);  // Hàm thiết lập danh sách môn học
     int getSubjectCount();                      // Hàm lấy số lượng môn học
     void setSubjectCount(int subjectCount);     // Hàm thiết lập số lượng môn học
+    float getAVGScore();                        // Hàm lấy điểm trung bình
+    bool checkScholarship();                    // Hàm check học bổng
+
+    friend ostream &operator << (ostream &out, Student other);  // Toán tử xuất
 };
 
 // Lớp chương trình
@@ -102,8 +106,10 @@ private:
     int countDigit(string input);   // Đếm số phần tử số hợp lệ trong chuỗi đầu vào
     void setTextColor(int color);   // Đổi màu chữ hiển thị trên console
     bool isValidDate(string date);  // Hàm kiểm tra ngày tháng năm có hợp lệ không
+    bool compareDate(Student studenA, Student studentB);
     Subject inputSubject();         // Nhập môn học
     Student inputStudent();         // Nhập sinh viên
+    void recursiveQuickSort(int left, int right);    // Hàm đệ quy để áp dụng trong thuật toán quick sort
 
 public:
     void inputStudentList();            // Nhập danh sách sinh viên
@@ -134,9 +140,8 @@ Array<DataType>::Array() {
 
 template<class DataType>
 Array<DataType>::Array(const Array<DataType> &other) {
-    delete[] _items;
     _iSize = other._iSize;
-    _items = new DataType[_iSize];
+    _items = new DataType[1000];
 
     for (int i = 0; i < other._iSize; i++) 
         _items[i] = other._items[i];
@@ -148,7 +153,7 @@ Array<DataType>::Array(const Array<DataType> &other) {
 ****************************************************************************/
 template<class DataType>
 Array<DataType>::~Array() {
-    this->clear();
+    delete[] _items;
 }
 
 /***************************************************************************
@@ -169,23 +174,22 @@ void Array<DataType>::add(DataType item) {
 template<class DataType>
 void Array<DataType>::print() {
     for (int i = 0; i < _iSize; i++)
-        cout << _items[i] << ' ';
+        cout << _items[i];
 
     // trường hợp mảng trống
     if (_iSize == 0) 
         cout << "empty!";
-
-    cout << endl;
 }
 
 /***************************************************************************
 * @Description xóa mảng.
-* @attention: đặt số lượng phần tử về 0, xóa cấp phát.
+* @attention: đặt số lượng phần tử về 0,các phần tử về 0.
 ****************************************************************************/
 template<class DataType>
 void Array<DataType>::clear() {
+    for (int i = 0; i < _iSize; i++)
+        _items[i] = 0;
     _iSize = 0;
-    delete[] _items;
 }
 
 /***************************************************************************
@@ -252,119 +256,23 @@ bool Array<DataType>::removeAll(DataType item) {
 * @return: trả về giá trị tại vị trí index trong mảng items.
 ****************************************************************************/
 template<class DataType>
-DataType Array<DataType>::getAt(int index) {
+DataType &Array<DataType>::getAt(int index) {
     return _items[index];
 }
 
-/***************************************************************************
-* @Description hàm sắp xếp theo điều kiện truyền vào, mặc định là tăng dần.
-* @param compare: Con trỏ đến hàm so sánh hai phần tử kiểu DataType. 
-* @attention: Hàm compare nhận vào hai đối tượng itemA và itemB để thực hiện so sánh.
-* @attention: sắp xếp theo thuật toán sắp xếp chèn (insertion sort).
-****************************************************************************/
 template<class DataType>
-void Array<DataType>::insertionSort(bool (*compare)(DataType itemA, DataType itemB)) {
-    if (compare == nullptr) {
-        compare = [] (DataType itemA, DataType itemB) {
-            return itemA < itemB;
-        };
-    }
-    
-    for (int i = 1; i < _iSize; i++) {
-        int j = i;
-        while (j > 0 && !compare(_items[j-1], _items[j])) {
-            swap(_items[j-1], _items[j]);
-            j--;
-        }
-    }
+Array<DataType> &Array<DataType>::operator = (const Array<DataType> &other) {
+    if (this == &other) 
+        return *this;
+
+    _iSize = other._iSize;
+    _items = new DataType[1000];
+
+    for (int i = 0; i < other._iSize; i++) 
+        _items[i] = other._items[i];
+
+    return *this;
 }
-
-template<class DataType>
-void Array<DataType>::selectionSort(bool (*compare)(DataType itemA, DataType itemB)) {
-    if (compare == nullptr) {
-        compare = [] (DataType itemA, DataType itemB) {
-            return itemA < itemB;
-        };
-    }
-
-    for (int i = 0; i < _iSize; i++) {
-        int iMinIdx = i;
-        for (int j = i + 1; j < _iSize; j++) 
-            if (compare(_items[j], _items[iMinIdx]))
-                iMinIdx = j;
-        if (iMinIdx != i)
-            swap(_items[iMinIdx], _items[i]);
-    }
-} 
-
-template<class DataType>
-void Array<DataType>::recursiveQuickSort(int left, int right,bool (*compare)(DataType itemA, DataType itemB)) {
-    if (left >= right)
-        return;
-
-    if (compare == nullptr) {
-        compare = [] (DataType itemA, DataType itemB) {
-            return itemA < itemB;
-        };
-    }
-
-    DataType x = _items[(left + right) / 2];
-    int i = left, j = right;
-
-    while (i < j) {
-        while (compare(_items[i], x)) i++;
-        while (compare(x, _items[j])) j--;
-
-        if (i <= j) {
-            swap(_items[i], _items[j]);
-            i++, j--;
-        }
-    } 
-
-    recursiveQuickSort(left, j, compare);
-    recursiveQuickSort(i, right, compare);
-}
-
-
-
-template<class DataType>
-void Array<DataType>::quickSort(bool (*compare)(DataType itemA, DataType itemB)) {
-    if (compare == nullptr) {
-        compare = [] (DataType itemA, DataType itemB) {
-            return itemA < itemB;
-        };
-    }
-
-    recursiveQuickSort(0, _iSize-1, compare);
-}
-
-
-
-template<class DataType>
-int Array<DataType>::binarySearch(DataType item, bool (*compare)(DataType itemA, DataType itemB)) {
-    if (compare == nullptr) {
-        compare = [] (DataType itemA, DataType itemB) {
-            return itemA < itemB;
-        };
-    }
-
-    int iLeft = 0, iRight = _iSize - 1;
-
-    while (iLeft <= iRight) {
-        int iMid = iLeft + (iRight - iLeft) / 2;
-
-        if (!compare(_items[iMid], item) && !compare(item, _items[iMid]))
-            return iMid;
-
-        if (compare(_items[iMid], item))
-            iLeft = iMid + 1;
-        else 
-            iRight = iMid - 1;
-    }
-
-    return -1;
-}
-
 
 Subject::Subject() {
     _strSubjectID = _strSubjectName = "";
@@ -419,6 +327,14 @@ float Subject::getScore() {
 
 void Subject::setScore(float score) {
     _fScore = score;
+}
+
+ostream &operator << (ostream &out, Subject other) {
+    out << "\nMã môn: " << other._strSubjectID << endl;
+    out << "Tên môn học: " << other._strSubjectName << endl;
+    out << "Số tín chỉ: " << other._iCredits << endl;
+    out << "Điểm: " << other._fScore << endl;
+    return out;
 }
 
 
@@ -487,6 +403,35 @@ void Student::setSubjectCount(int subjectCount) {
     _iSubjectCount = subjectCount;
 }
 
+float Student::getAVGScore() {
+    float fResult = 0;
+    for (int i = 0; i < _arrSubjects.size(); i++) 
+        fResult += _arrSubjects.getAt(i).getScore();
+    fResult /= _arrSubjects.size();
+    return fResult;
+}
+
+bool Student::checkScholarship() {
+    if (getAVGScore() < 7)
+        return false;
+
+    for (int i = 0; i < _arrSubjects.size(); i++)
+        if (_arrSubjects.getAt(i).getScore() < 5)
+            return false;
+    
+    return true;
+}
+
+ostream &operator << (ostream &out, Student other) {
+    out << "-------------------------------------------------\n";
+    out << "Mã sinh viên: " << other._strStudentID << endl;
+    out << "Họ tên: " << other._strFullName << endl;
+    out << "Ngày sinh: " << other._strBirthDate << endl;
+    out << "Danh sách môn học: " << endl;
+    other._arrSubjects.print();
+    //out << "-------------------------------------------------\n\n";
+    return out;
+}
 
  
 /***************************************************************************
@@ -529,6 +474,26 @@ bool Program::isValidDate(string date) {
     arrDays[2] = (iYear % 400 == 0 || (iYear % 4 == 0 && iYear % 100 != 0)) ? 29 : 28;
 
     if (iDay > arrDays[iMonth])
+        return false;
+
+    return true;
+}
+
+bool Program::compareDate(Student studentA, Student studentB) {
+    struct Date {
+        int day, month, year;
+    } dateA, dateB;
+
+    sscanf(studentA.getBirthDate().c_str(), "%d/%d/%d", &dateA.day, &dateA.month, &dateA.year);
+    sscanf(studentB.getBirthDate().c_str(), "%d/%d/%d", &dateB.day, &dateB.month, &dateB.year);
+
+    if (dateA.year > dateB.year) 
+        return false;
+
+    if (dateA.year == dateB.year && dateA.month > dateB.month)
+        return false;
+
+    if (dateA.year == dateB.year && dateA.month == dateB.month && dateA.day > dateB.day)
         return false;
 
     return true;
@@ -783,6 +748,29 @@ Student Program::inputStudent() {
     return student;
 }
 
+
+void Program::recursiveQuickSort(int left, int right) {
+    if (left >= right)
+        return;
+
+    Student x = _array.getAt((left + right) / 2);
+    int i = left, j = right;
+
+    while (i < j) {
+        while (compareDate(_array.getAt(i), x)) i++;
+        while (compareDate(x, _array.getAt(j))) j--;
+
+        if (i <= j) {
+            swap(_array.getAt(i), _array.getAt(j));
+            i++, j--;
+        }
+    } 
+
+    recursiveQuickSort(left, j);
+    recursiveQuickSort(i, right);
+}
+
+
 void Program::inputStudentList() {
     int iSize;
     char cKey;
@@ -829,27 +817,181 @@ void Program::inputStudentList() {
 }
 
 void Program::updateStudentNameByID() {
+    char cKey;
+    string strInput, strStudentID, strNewName;
+    
+    setTextColor(BLUE);
+    cout << "≫ Nhập mã sinh viên cần tìm (11 ký tự): ";
 
+    setTextColor(YELLOW);
+    while (true) {
+        cKey = _getch();
+
+        if (isalnum(cKey) && strStudentID.size() < 11) {
+            cout << cKey;
+            strStudentID += cKey;
+        }
+
+        else if (cKey == 8) {
+            if (!strStudentID.empty()) {
+                cout << "\b \b";
+                strStudentID.pop_back();
+            }
+        }
+
+        else if (cKey == '\r' && !strStudentID.empty() && strStudentID.size() == 11) {
+            cout << endl;
+            break;
+        }
+    }
+
+    bool bCheck = false;
+    int iIndex = -1;
+    for (int i = 0; i < _array.size(); i++) {
+        if (_array.getAt(i).getStudentID() == strStudentID) {
+            bCheck = true;
+            iIndex = i;
+            break;
+        }
+    }
+
+    if (!bCheck) {
+        setTextColor(RED);
+        cout << "≫ Không có sinh viên này!\n";
+        return;
+    }
+
+    setTextColor(BLUE);
+    cout << "≫ Nhập tên mới của sinh viên: ";
+
+    setTextColor(YELLOW);
+    while (true) {
+        cKey = _getch();
+
+        if (isalpha(cKey) || cKey == ' ') {
+            cout << cKey;
+            strNewName += cKey;
+        }
+
+        else if (cKey == 8) {
+            if (!strNewName.empty()) {
+                cout << "\b \b";
+                strNewName.pop_back();
+            }
+        }
+
+        else if (cKey == '\r' && !strNewName.empty()) {
+            cout << endl;
+            break;
+        }
+    }
+
+    _array.getAt(iIndex).setFullName(strNewName);
+    setTextColor(GREEN);
+    cout << "≫ Đã đổi tên thành công!\n";
 }
 
 void Program::sortStudentByNameDesc() {
-
+    for (int i = 1; i < _array.size(); i++) {
+        int j = i;
+        while (j > 0 && _array.getAt(j-1).getFullName() < _array.getAt(j).getFullName()) {
+            swap(_array.getAt(j-1), _array.getAt(j));
+            j--;
+        }
+    }
+    setTextColor(GREEN);
+    cout << "≫ Đã sắp xếp thành công!\n";
 }
 
 void Program::removeStudentByName() {
+    string strName;
+    char cKey;
+
+    setTextColor(BLUE);
+    cout << "≫ Nhập tên sinh viên cần xóa: ";
+
+    setTextColor(YELLOW);
+    while (true) {
+        cKey = _getch();
+
+        if (isalpha(cKey) || cKey == ' ') {
+            cout << cKey;
+            strName += cKey;
+        }
+
+        else if (cKey == 8) {
+            if (!strName.empty()) {
+                cout << "\b \b";
+                strName.pop_back();
+            }
+        }
+
+        else if (cKey == '\r' && !strName.empty()) {
+            cout << endl;
+            break;
+        }
+    }
+    
+    int iLeft = 0, iRight = _array.size(), iIndex = -1;
+    while (iLeft <= iRight) {
+        int iMid = iLeft + (iRight - iLeft) / 2;
+
+        if (strName == _array.getAt(iMid).getFullName()) {
+            iIndex = iMid;
+            break;
+        }
+
+        if (strName < _array.getAt(iMid).getFullName())
+            iRight = iMid - 1;
+        else 
+            iLeft = iMid + 1;
+    }
+
+    if (iIndex == -1) {
+        setTextColor(RED);
+        cout << "≫ Không tìm thấy sinh viên cần xóa!" << endl;
+        return;
+    } 
+
+    _array.removeAtIndex(iIndex);
+
+    setTextColor(GREEN);
+    cout << "≫ Đã xóa thành công!" << endl;
 
 }
 
 void Program::sortStudentByAVGScoreAsc() {
-
+    for (int i = 0; i < _array.size(); i++) {
+        int iMinIdx = i;
+        for (int j = i + 1; j < _array.size(); j++) 
+            if (_array.getAt(j).getAVGScore() < _array.getAt(iMinIdx).getAVGScore())
+                iMinIdx = j;
+        swap(_array.getAt(iMinIdx), _array.getAt(i));
+    }
 }
 
 void Program::printScholarshipStudents() {
+    setTextColor(BLUE);
+    cout << "≫ Danh sách có học bổng" << endl;
 
+    setTextColor(YELLOW);
+    int iCount = 0;
+
+    for (int i = 0; i < _array.size(); i++) {
+        if (_array.getAt(i).checkScholarship()) {
+            cout << _array.getAt(i);
+            iCount++;
+        }
+    }
+
+    if (iCount == 0) {
+        setTextColor(RED);
+        cout << "≫ Không có!" << endl;
+    }
 }
 
 void Program::sortStudentsByBirthYearAsc() {
-
+    recursiveQuickSort(0, _array.size()-1);
 }
 
 
@@ -861,7 +1003,7 @@ void Program::run() {
     setTextColor(WHITE);    
     SetConsoleOutputCP(CP_UTF8);    // Thiết lập mã hóa để console hỗ trợ tiếng Việt
 
-    inputStudentList();
+    // Thiết kế menu tại đây
 
     setTextColor(WHITE);
     cout << "≫ Nhấn phím bất kỳ để đóng chương trình!";
