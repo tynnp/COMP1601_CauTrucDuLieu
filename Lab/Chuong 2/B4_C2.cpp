@@ -1166,7 +1166,8 @@ void Program::displayMenu() {
 ****************************************************************************/
 void Program::run() {
     setTextColor(WHITE);    
-    SetConsoleOutputCP(CP_UTF8);    // Thiết lập mã hóa để console hỗ trợ tiếng Việt
+    SetConsoleOutputCP(CP_UTF8);    // Xuất được tiếng Việt
+    //SetConsoleCP(CP_UTF8);          // Nhập được tiếng Việt, thiết lập ràng buộc dữ liệu nên không dùng hàm này
 
     int iMenuSelection = -1;
 
