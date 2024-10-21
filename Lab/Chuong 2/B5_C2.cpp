@@ -75,6 +75,8 @@ private:
     int countDigit(string input);                           // Đếm số phần tử số hợp lệ trong chuỗi đầu vào
     void setTextColor(int color);                           // Đổi màu chữ hiển thị trên console
     Book inputBook();
+    int selectOption();
+    void endOption();
     void recursiveQuickSort(int left, int right);
 
 public:
@@ -297,7 +299,7 @@ ostream &operator << (ostream &out, Book other) {
     out << "Mã sách: " << other._strBookID << endl;
     out << "Tựa sách: " << other._strBookTitle << endl;
     out << "Năm xuất bản: " << other._iPublicationYear << endl;
-    out << "Giá: " << other._iPrice << endl;
+    out << "Giá: " << other._iPrice << endl << endl;
     return out;
 }
 
@@ -423,7 +425,7 @@ Book Program::inputBook() {
     while (true) {
         cKey = _getch();
 
-        if (isdigit(cKey) && strInput.size() < 5) {
+        if (isdigit(cKey) && strInput.size() < 6) {
             cout << cKey;
             strInput += cKey;
         }
@@ -445,6 +447,48 @@ Book Program::inputBook() {
 
     Book book(strBookID, strBookTitle, iPublicationYear, iPrice);
     return book;
+}
+
+int Program::selectOption() {
+    int iOption = -1;
+    char cKey;
+    string strInput;
+
+    while (true) {
+        cKey = _getch();
+
+        if (isdigit(cKey) && cKey >= '1' && cKey <= '9' && strInput.empty()) {
+            cout << cKey;
+            strInput += cKey;
+        }
+
+        else if (cKey == 8) {
+            if (!strInput.empty()) {
+                cout << "\b \b";
+                strInput.pop_back();
+            }
+        }
+
+        else if (cKey == '\r' && !strInput.empty()) {
+            cout << endl;
+            break;
+        }
+    }
+
+    iOption = stoi(strInput);
+    return iOption;
+}
+
+void Program::endOption() {
+    setTextColor(BLUE);
+    cout << "≫ Nhấn enter để tiếp tục...";
+        
+    char cKey;
+    while (true) {
+        cKey = _getch();
+        if (cKey == '\r')
+            break;
+    }
 }
 
 void Program::recursiveQuickSort(int left, int right) {
@@ -529,6 +573,7 @@ void Program::inputBookList() {
                 continue;
 
             _bookList.add(book);
+            break;
         }
 
         setTextColor(GREEN);
@@ -544,7 +589,7 @@ void Program::printBookList() {
     }
 
     setTextColor(GREEN);
-    cout << "≫ Thông tin sách hiện có:" << endl;
+    cout << "≫ Thông tin sách hiện có:\n\n";
 
     setTextColor(YELLOW);
     _bookList.print();
@@ -610,7 +655,7 @@ void Program::updateBookPrice() {
     while (true) {
         cKey = _getch();
 
-        if (isdigit(cKey) && strInput.size() < 5) {
+        if (isdigit(cKey) && strInput.size() < 6) {
             cout << cKey;
             strInput += cKey;
         }
@@ -786,5 +831,83 @@ void Program::displayMenu() {
 }
 
 void Program::run() {
-    // TODO: viết hàm chính
+    setTextColor(WHITE);    
+    SetConsoleOutputCP(CP_UTF8);    // Xuất được tiếng Việt
+    //SetConsoleCP(CP_UTF8);          // Nhập được tiếng Việt, thiết lập ràng buộc dữ liệu nên không dùng hàm này
+
+    int iMenuSelection = -1;
+    while (iMenuSelection != 9) {
+        system("cls");
+        displayMenu();
+
+        setTextColor(BLUE);
+        cout << "≫ Nhập chức năng: ";
+
+        setTextColor(YELLOW);
+        iMenuSelection = selectOption();
+
+        switch (iMenuSelection) {
+            case 1: {
+                system("cls");
+                inputBookList();
+                break;
+            }
+
+            case 2: {
+                system("cls");
+                printBookList();
+                break;
+            }
+
+            case 3: {
+                system("cls");
+                updateBookPrice();
+                break;
+            }
+
+            case 4: {
+                system("cls");
+                deleteBook();
+                break;
+            }
+
+            case 5: {
+                system("cls");
+                sortBooksByIDAsc();
+                printBookList();
+                break;
+            }
+
+            case 6: {
+                system("cls");
+                sortBooksByPublicationYearDesc();
+                printBookList();
+                break;
+            }
+
+            case 7: {
+                system("cls");
+                sortBooksByTitleAsc();
+                printBookList();
+                break;
+            }
+
+            case 8: {
+                system("cls");
+                sortBooksByPriceDesc();
+                printBookList();
+                break;
+            }
+
+            case 9: {
+                setTextColor(RED);
+                cout << "≫ Thoát chương trình...\n";
+                Sleep(3000);      
+                setTextColor(WHITE);
+                return;
+            }
+        }
+
+        endOption();
+    }
 }
