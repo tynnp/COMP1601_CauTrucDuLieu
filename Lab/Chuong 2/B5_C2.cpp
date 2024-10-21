@@ -75,13 +75,14 @@ private:
     int countDigit(string input);                           // Đếm số phần tử số hợp lệ trong chuỗi đầu vào
     void setTextColor(int color);                           // Đổi màu chữ hiển thị trên console
     Book inputBook();
+    void recursiveQuickSort(int left, int right);
 
 public:
     void inputBookList();
     void printBookList();
     void updateBookPrice();
     void deleteBook();
-    void sortBooksByIDAsc();
+    void sortBooksByIDAsc(bool notification = true);
     void sortBooksByPublicationYearDesc();
     void sortBooksByTitleAsc();
     void sortBooksByPriceDesc();
@@ -446,6 +447,27 @@ Book Program::inputBook() {
     return book;
 }
 
+void Program::recursiveQuickSort(int left, int right) {
+    if (left >= right) 
+        return;
+
+    Book x = _bookList.getAt((left + right) / 2);
+    int i = left, j = right;
+
+    while (i <= j) {
+        while (_bookList.getAt(i).getPrice() > x.getPrice()) i++;
+        while (_bookList.getAt(j).getPrice() < x.getPrice()) j--;
+
+        if (i <= j) {
+            swap(_bookList.getAt(i), _bookList.getAt(j));
+            i++, j--;
+        }
+    }
+
+    recursiveQuickSort(left, j);
+    recursiveQuickSort(i, right);
+}
+
 
 void Program::inputBookList() {
     int iSize;
@@ -517,7 +539,7 @@ void Program::inputBookList() {
 void Program::printBookList() {
     if (_bookList.size() == 0) {
         setTextColor(RED);
-        cout << "≫ Không có thông tin sách nào trong danh sách!" << endl;
+        cout << "≫ Hiện không có sách nào được quản lý!" << endl;
         return;
     }
 
@@ -529,27 +551,223 @@ void Program::printBookList() {
 }
 
 void Program::updateBookPrice() {
-    // TODO: viết định nghĩa theo yêu cầu đề bài
+    if (_bookList.size() == 0) {
+        setTextColor(RED);
+        cout << "≫ Hiện không có sách nào được quản lý!\n";
+        return;
+    }
+
+    char cKey;
+    int iPrice;
+    string strBookTitle, strInput;
+
+    setTextColor(BLUE);
+    cout << "≫ Nhập tên sách: ";
+
+    setTextColor(YELLOW);
+    while (true) {
+        cKey = _getch();
+
+        if ((isalnum(cKey) || cKey == ' ') && strBookTitle.size() < 30) {
+            cout << cKey;
+            strBookTitle += cKey;
+        }
+
+        else if (cKey == 8) {
+            if (!strBookTitle.empty()) {
+                cout << "\b \b";
+                strBookTitle.pop_back();
+            }
+        }
+
+        else if (cKey == '\r' && !strBookTitle.empty()) {
+            cout << endl;
+            break;
+        }
+    }
+
+    int iIndex = -1;
+    for (int i = 0; i < _bookList.size(); i++) {
+        if (_bookList.getAt(i).getBookTitle() == strBookTitle) {
+            iIndex = i;
+            break;
+        }
+    }
+
+    if (iIndex == -1) {
+        setTextColor(RED);
+        cout << "≫ Không tìm thấy sách này!\n";
+        return;
+    } 
+
+    setTextColor(GREEN);
+    cout << "≫ Giá hiện tại của sách " + strBookTitle + " là " << _bookList.getAt(iIndex).getPrice() << endl;
+
+    setTextColor(BLUE);
+    cout << "≫ Nhập giá bán mới: ";
+
+    setTextColor(YELLOW);
+    while (true) {
+        cKey = _getch();
+
+        if (isdigit(cKey) && strInput.size() < 5) {
+            cout << cKey;
+            strInput += cKey;
+        }
+
+        else if (cKey == 8) {
+            if (!strInput.empty()) {
+                cout << "\b \b";
+                strInput.pop_back();
+            }
+        }
+
+        else if (cKey == '\r' && !strInput.empty()) {
+            cout << endl;
+            break;
+        }
+    }
+
+    iPrice = stoi(strInput);
+
+    _bookList.getAt(iIndex).setPrice(iPrice);
+    setTextColor(GREEN);
+     cout << "≫ Đã thay đổi giá thành " << iPrice << "\n\n";
 }
 
 void Program::deleteBook() {
-    // TODO: viết định nghĩa theo yêu cầu đề bài
+    if (_bookList.size() == 0) {
+        setTextColor(RED);
+        cout << "≫ Hiện không có sách nào được quản lý!\n";
+        return;
+    }
+
+    sortBooksByIDAsc(false);
+
+    string strBookID;
+    char cKey;
+
+    setTextColor(BLUE);
+    cout << "≫ Nhập mã sách của sách cần xóa: ";
+
+    setTextColor(YELLOW);
+    while (true) {
+        cKey = _getch();
+
+        if (isalnum(cKey) && strBookID.size() < 6) {
+            cout << cKey;
+            strBookID += cKey;
+        }
+
+        else if (cKey == 8) {
+            if (!strBookID.empty()) {
+                cout << "\b \b";
+                strBookID.pop_back();
+            }
+        }
+        
+        else if (cKey == '\r' && !strBookID.empty()) {
+            cout << endl;
+            break;
+        }
+    }
+
+    int iLeft = 0, iRight = _bookList.size(), iIndex = -1;
+    while (iLeft <= iRight) {
+        int iMid = iLeft + (iRight - iLeft) / 2;
+
+        if (strBookID == _bookList.getAt(iMid).getBookID()) {
+            iIndex = iMid;
+            break;
+        }
+
+        if (strBookID < _bookList.getAt(iMid).getBookID()) 
+            iRight = iMid - 1;
+        else 
+            iLeft = iMid + 1;
+    }
+
+    if (iIndex == -1) {
+        setTextColor(RED);
+        cout << "≫ Không tìm thấy sách có mã này!" << endl;
+        return;
+    }
+
+    _bookList.removeAtIndex(iIndex);
+
+    setTextColor(GREEN);
+    cout << "≫ Đã xóa thành công!" << endl;
 }
 
-void Program::sortBooksByIDAsc() {
-    // TODO: viết định nghĩa theo yêu cầu đề bài
+void Program::sortBooksByIDAsc(bool notification) {
+    if (_bookList.size() == 0) {
+        setTextColor(RED);
+        cout << "≫ Hiện không có sách nào được quản lý!\n";
+        return;
+    }
+
+    for (int i = 0; i < _bookList.size(); i++) {
+        int iMin = i;
+
+        for (int j = i+1; j < _bookList.size(); j++) 
+            if (_bookList.getAt(j).getBookID() < _bookList.getAt(iMin).getBookID())
+                iMin = j;
+
+        swap(_bookList.getAt(iMin), _bookList.getAt(i));
+    }
+
+    if (notification) {
+        setTextColor(GREEN);
+        cout << "≫ Danh sách đã được sắp xếp tăng dần theo mã sách!\n";
+    }
 }
 
 void Program::sortBooksByPublicationYearDesc() {
-    // TODO: viết định nghĩa theo yêu cầu đề bài
+    if (_bookList.size() == 0) {
+        setTextColor(RED);
+        cout << "≫ Hiện không có sách nào được quản lý!\n";
+        return;
+    }
+
+    for (int i = 1; i < _bookList.size(); i++) {
+        int j = i;
+        while (j > 0 && _bookList.getAt(j-1).getPublicationYear() < _bookList.getAt(j).getPublicationYear()) {
+            swap(_bookList.getAt(j-1), _bookList.getAt(j));
+            j--;
+        }
+    }
+
+    setTextColor(GREEN);
+    cout << "≫ Danh sách đã được sắp xếp giảm dần theo năm xuất bản!\n";
 }
 
 void Program::sortBooksByTitleAsc() {
-    // TODO: viết định nghĩa theo yêu cầu đề bài
+    if (_bookList.size() == 0) {
+        setTextColor(RED);
+        cout << "≫ Hiện không có sách nào được quản lý!\n";
+        return;
+    }
+
+    for (int i = 0; i < _bookList.size() - 1; i++) 
+        for (int j = _bookList.size() - 1; j > i; j--) 
+            if (_bookList.getAt(j-1).getBookTitle() > _bookList.getAt(j).getBookTitle())
+                swap(_bookList.getAt(j-1), _bookList.getAt(j));
+
+    setTextColor(GREEN);
+    cout << "≫ Danh sách đã được sắp xếp tăng dần theo tên sách!\n";
 }
 
 void Program::sortBooksByPriceDesc() {
-    // TODO: viết định nghĩa theo yêu cầu đề bài
+    if (_bookList.size() == 0) {
+        setTextColor(RED);
+        cout << "≫ Hiện không có sách nào được quản lý!\n";
+        return;
+    }
+
+    recursiveQuickSort(0, _bookList.size()-1);
+
+    setTextColor(GREEN);
+    cout << "≫ Danh sách đã được sắp xếp giảm dần theo giá sách!\n";
 }
 
 void Program::displayMenu() {
@@ -566,7 +784,6 @@ void Program::displayMenu() {
     cout << "9. Thoát chương trình." << endl;
     cout << "----------------------------------------------------------------" << endl;
 }
-
 
 void Program::run() {
     // TODO: viết hàm chính
