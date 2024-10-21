@@ -1228,7 +1228,7 @@ void Program::run() {
             }
 
             case 8: {
-                setTextColor(GREEN);
+                setTextColor(RED);
                 cout << "≫ Thoát chương trình...\n";
                 Sleep(3000);      
                 setTextColor(WHITE);
