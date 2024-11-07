@@ -261,6 +261,7 @@ DataType &Array<DataType>::getAt(int index) {
     return _items[index];
 }
 
+// TODO: Bổ sung comment hàm
 template<class DataType>
 Array<DataType> &Array<DataType>::operator = (const Array<DataType> &other) {
     if (this == &other) 
@@ -275,11 +276,13 @@ Array<DataType> &Array<DataType>::operator = (const Array<DataType> &other) {
     return *this;
 }
 
+// TODO: Bổ sung comment hàm
 Subject::Subject() {
     _strSubjectID = _strSubjectName = "";
     _iCredits = _fScore = 0;
 }
 
+// TODO: Bổ sung comment hàm
 Subject::Subject(string subjectID, string subjectName, int credits, float score) {
     _strSubjectID = subjectID;
     _strSubjectName = subjectName;
@@ -287,6 +290,7 @@ Subject::Subject(string subjectID, string subjectName, int credits, float score)
     _fScore = score;
 }
 
+// TODO: Bổ sung comment hàm
 Subject::Subject(const Subject &other) {
     _strSubjectID = other._strSubjectID;
     _strSubjectName = other._strSubjectName;
@@ -294,42 +298,52 @@ Subject::Subject(const Subject &other) {
     _fScore = other._fScore;
 }
 
+// TODO: Bổ sung comment hàm
 Subject::~Subject() {
     // Không cần định nghĩa
 }
 
+// TODO: Bổ sung comment hàm
 string Subject::getSubjectID() {
     return _strSubjectID;
 }
 
+// TODO: Bổ sung comment hàm
 void Subject::setSubjectID(string subjectID) {
     _strSubjectID = subjectID;
 }
 
+// TODO: Bổ sung comment hàm
 string Subject::getSubjectName() {
     return _strSubjectName;
 }
 
+// TODO: Bổ sung comment hàm
 void Subject::setSubjectName(string subjectName) {
     _strSubjectName = subjectName;
 }
 
+// TODO: Bổ sung comment hàm
 int Subject::getCredits() {
     return _iCredits;
 }
 
+// TODO: Bổ sung comment hàm
 void Subject::setCredits(int credits) {
     _iCredits = credits;
 }
 
+// TODO: Bổ sung comment hàm
 float Subject::getScore() {
     return _fScore;
 }
 
+// TODO: Bổ sung comment hàm
 void Subject::setScore(float score) {
     _fScore = score;
 }
 
+// TODO: Bổ sung comment hàm
 ostream &operator << (ostream &out, Subject other) {
     out << "\nMã môn: " << other._strSubjectID << endl;
     out << "Tên môn học: " << other._strSubjectName << endl;
@@ -341,12 +355,13 @@ ostream &operator << (ostream &out, Subject other) {
     return out;
 }
 
-
+// TODO: Bổ sung comment hàm
 Student::Student() {
     _strStudentID = _strFullName = _strBirthDate = "";
     _iSubjectCount = 0;
 }
 
+// TODO: Bổ sung comment hàm
 Student::Student(string studentID, string fullName, string birthDate, Array<Subject> subjects, int subjectCount) {
     _strStudentID = studentID;
     _strFullName = fullName;
@@ -355,6 +370,7 @@ Student::Student(string studentID, string fullName, string birthDate, Array<Subj
     _iSubjectCount = subjectCount;
 }
 
+// TODO: Bổ sung comment hàm
 Student::Student(const Student &other) {
     _strStudentID = other._strStudentID;
     _strFullName = other._strFullName;
@@ -363,50 +379,62 @@ Student::Student(const Student &other) {
     _iSubjectCount = other._iSubjectCount;
 }
 
+// TODO: Bổ sung comment hàm
 Student::~Student() {
     // Không cần định nghĩa
 }
 
+// TODO: Bổ sung comment hàm
 string Student::getStudentID() {
     return _strStudentID;
 }
 
+// TODO: Bổ sung comment hàm
 void Student::setStudentID(string studentID) {
     _strStudentID = studentID;
 }
 
+// TODO: Bổ sung comment hàm
 string Student::getFullName() {
     return _strFullName;
 }
 
+// TODO: Bổ sung comment hàm
 void Student::setFullName(string fullName) {
     _strFullName = fullName;
 }
 
+// TODO: Bổ sung comment hàm
 string Student::getBirthDate() {
     return _strBirthDate;
 }
 
+// TODO: Bổ sung comment hàm
 void Student::setBirthDate(string birthDate) {
     _strBirthDate = birthDate;
 }
 
+// TODO: Bổ sung comment hàm
 Array<Subject> Student::getSubjects() {
     return _arrSubjects;
 }
 
+// TODO: Bổ sung comment hàm
 void Student::setSubjects(Array<Subject> subjects) {
     _arrSubjects = subjects;
 }
 
+// TODO: Bổ sung comment hàm
 int Student::getSubjectCount() {
     return _iSubjectCount;
 }
 
+// TODO: Bổ sung comment hàm
 void Student::setSubjectCount(int subjectCount) {
     _iSubjectCount = subjectCount;
 }
 
+// TODO: Bổ sung comment hàm
 float Student::getAVGScore() {
     float fResult = 0;
     for (int i = 0; i < _arrSubjects.size(); i++) 
@@ -415,6 +443,7 @@ float Student::getAVGScore() {
     return fResult;
 }
 
+// TODO: Bổ sung comment hàm
 bool Student::checkScholarship() {
     if (getAVGScore() < 7)
         return false;
@@ -426,6 +455,7 @@ bool Student::checkScholarship() {
     return true;
 }
 
+// TODO: Bổ sung comment hàm
 ostream &operator << (ostream &out, Student other) {
     out << "----------------------------------------------------------------\n";
     out << "Mã sinh viên: " << other._strStudentID << endl;
@@ -440,7 +470,6 @@ ostream &operator << (ostream &out, Student other) {
     return out;
 }
 
- 
 /***************************************************************************
 * @Description đếm các số có trong chuỗi input.
 * @param input: chuỗi chứa các số.
@@ -467,6 +496,7 @@ void Program::setTextColor(int color) {
     SetConsoleTextAttribute(hConsole, color);   // Đặt màu chữ trên console
 }
 
+// TODO: Bổ sung comment hàm
 bool Program::isValidDate(string date) {
     regex datePattern(R"(^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\d{4}$)");
 
@@ -486,6 +516,7 @@ bool Program::isValidDate(string date) {
     return true;
 }
 
+// TODO: Bổ sung comment hàm
 bool Program::compareDate(Student studentA, Student studentB) {
     int dayA, monthA, yearA;
     int dayB, monthB, yearB;
@@ -502,6 +533,7 @@ bool Program::compareDate(Student studentA, Student studentB) {
     return dayA < dayB;
 }
 
+// TODO: Bổ sung comment hàm
 Subject Program::inputSubject() {
     string strSubjectID, strSubjectName;
     int iCredits;
@@ -622,6 +654,7 @@ Subject Program::inputSubject() {
     return subject;
 }
 
+// TODO: Bổ sung comment hàm
 Student Program::inputStudent() {
     string strStudentID, strFullName, strBirthDate;
     Array<Subject> arrSubjects;
@@ -774,6 +807,7 @@ Student Program::inputStudent() {
     return student;
 }
 
+// TODO: Bổ sung comment hàm
 int Program::selectOption() {
     int iOption = -1;
     char cKey;
@@ -804,6 +838,7 @@ int Program::selectOption() {
     return iOption;
 }
 
+// TODO: Bổ sung comment hàm
 void Program::endOption() {
     setTextColor(BLUE);
     cout << "≫ Nhấn enter để tiếp tục...";
@@ -816,6 +851,7 @@ void Program::endOption() {
     }
 }
 
+// TODO: Bổ sung comment hàm
 void Program::recursiveQuickSort(int left, int right) {
     if (left >= right)
         return;
@@ -837,6 +873,7 @@ void Program::recursiveQuickSort(int left, int right) {
     recursiveQuickSort(i, right);
 }
 
+// TODO: Bổ sung comment hàm
 void Program::inputStudentList() {
     int iSize;
     char cKey;
@@ -905,6 +942,7 @@ void Program::inputStudentList() {
     }
 }
 
+// TODO: Bổ sung comment hàm
 void Program::updateStudentNameByID() {
     if (_array.size() == 0) {
         setTextColor(RED);
@@ -991,6 +1029,7 @@ void Program::updateStudentNameByID() {
     cout << "≫ Đã đổi tên thành công!\n";
 }
 
+// TODO: Bổ sung comment hàm
 void Program::sortStudentByNameDesc() {
     if (_array.size() == 0) {
         setTextColor(RED);
@@ -1012,6 +1051,7 @@ void Program::sortStudentByNameDesc() {
     setTextColor(YELLOW);
 }
 
+// TODO: Bổ sung comment hàm
 void Program::sortStudentByNameAsc() {
     if (_array.size() == 0) {
         setTextColor(RED);
@@ -1028,6 +1068,7 @@ void Program::sortStudentByNameAsc() {
     }
 }
 
+// TODO: Bổ sung comment hàm
 void Program::removeStudentByName() {
     if (_array.size() == 0) {
         setTextColor(RED);
@@ -1094,6 +1135,7 @@ void Program::removeStudentByName() {
 
 }
 
+// TODO: Bổ sung comment hàm
 void Program::sortStudentByAVGScoreAsc() {
     if (_array.size() == 0) {
         setTextColor(RED);
@@ -1114,6 +1156,7 @@ void Program::sortStudentByAVGScoreAsc() {
     setTextColor(YELLOW);
 }
 
+// TODO: Bổ sung comment hàm
 void Program::printScholarshipStudents() {
     setTextColor(YELLOW);
     int iCount = 0;
@@ -1132,6 +1175,7 @@ void Program::printScholarshipStudents() {
     }
 }
 
+// TODO: Bổ sung comment hàm
 void Program::sortStudentsByBirthYearAsc() {
     if (_array.size() == 0) {
         setTextColor(RED);
@@ -1146,6 +1190,7 @@ void Program::sortStudentsByBirthYearAsc() {
     setTextColor(YELLOW);
 }
 
+// TODO: Bổ sung comment hàm
 void Program::displayMenu() {
     setTextColor(GREEN);
     cout << "-----------------Chương trình quản lý sinh viên-----------------" << endl;
