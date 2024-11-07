@@ -43,6 +43,7 @@ public:
 };
 
 // Lớp sách
+// TODO: bổ sung comment cho thuộc tính và phương thức
 class Book {
 private:
     string _strBookID;
@@ -69,6 +70,7 @@ public:
 };
 
 // Lớp chương trình
+// TODO: bổ sung comment cho thuộc tính và phương thức
 class Program {
 private:
     Array<Book> _bookList;
@@ -226,6 +228,7 @@ DataType &Array<DataType>::getAt(int index) {
     return _items[index];
 }
 
+// TODO: Bổ sung comment hàm
 template<class DataType>
 Array<DataType> &Array<DataType>::operator = (const Array<DataType> &other) {
     if (this == &other) 
@@ -240,11 +243,13 @@ Array<DataType> &Array<DataType>::operator = (const Array<DataType> &other) {
     return *this;
 }
 
+// TODO: Bổ sung comment hàm
 Book::Book() {
     _strBookID = _strBookTitle = "";
     _iPublicationYear = _iPrice = 0;
 }
 
+// TODO: Bổ sung comment hàm
 Book::Book(string bookID, string bookTitle, int publicationYear, int price) {
     _strBookID = bookID;
     _strBookTitle = bookTitle;
@@ -252,6 +257,7 @@ Book::Book(string bookID, string bookTitle, int publicationYear, int price) {
     _iPrice = price;
 }
 
+// TODO: Bổ sung comment hàm
 Book::Book(const Book &other) {
     _strBookID = other._strBookID;
     _strBookTitle = other._strBookTitle;
@@ -259,42 +265,52 @@ Book::Book(const Book &other) {
     _iPrice = other._iPrice;
 }
 
+// TODO: Bổ sung comment hàm
 Book::~Book() {
     // Không cần định nghĩa
 }
 
+// TODO: Bổ sung comment hàm
 string Book::getBookID() {
     return _strBookID;
 }
 
+// TODO: Bổ sung comment hàm
 void Book::setBookID(string bookID) {
     _strBookID = bookID;
 }
 
+// TODO: Bổ sung comment hàm
 string Book::getBookTitle() {
     return _strBookTitle;
 }
 
+// TODO: Bổ sung comment hàm
 void Book::setBookTitle(string bookTitle) {
     _strBookTitle = bookTitle;
 }   
 
+// TODO: Bổ sung comment hàm
 int Book::getPublicationYear() {
     return _iPublicationYear;
 }
 
+// TODO: Bổ sung comment hàm
 void Book::setPublicationYear(int publicationYear) {
     _iPublicationYear = publicationYear;
 }
 
+// TODO: Bổ sung comment hàm
 int Book::getPrice() {
     return _iPrice;
 }
 
+// TODO: Bổ sung comment hàm
 void Book::setPrice(int price) {
     _iPrice = price;
 }
 
+// TODO: Bổ sung comment hàm
 ostream &operator << (ostream &out, Book other) {
     out << "Mã sách: " << other._strBookID << endl;
     out << "Tựa sách: " << other._strBookTitle << endl;
@@ -329,6 +345,7 @@ void Program::setTextColor(int color) {
     SetConsoleTextAttribute(hConsole, color);   // Đặt màu chữ trên console
 }
 
+// TODO: Bổ sung comment hàm
 Book Program::inputBook() {
     string strBookID, strBookTitle;
     int iPublicationYear, iPrice;
@@ -449,6 +466,7 @@ Book Program::inputBook() {
     return book;
 }
 
+// TODO: Bổ sung comment hàm
 int Program::selectOption() {
     int iOption = -1;
     char cKey;
@@ -479,6 +497,7 @@ int Program::selectOption() {
     return iOption;
 }
 
+// TODO: Bổ sung comment hàm
 void Program::endOption() {
     setTextColor(BLUE);
     cout << "≫ Nhấn enter để tiếp tục...";
@@ -491,6 +510,7 @@ void Program::endOption() {
     }
 }
 
+// TODO: Bổ sung comment hàm
 void Program::recursiveQuickSort(int left, int right) {
     if (left >= right) 
         return;
@@ -512,7 +532,7 @@ void Program::recursiveQuickSort(int left, int right) {
     recursiveQuickSort(i, right);
 }
 
-
+// TODO: Bổ sung comment hàm
 void Program::inputBookList() {
     int iSize;
     char cKey;
@@ -581,6 +601,7 @@ void Program::inputBookList() {
     }
 } 
 
+// TODO: Bổ sung comment hàm
 void Program::printBookList() {
     if (_bookList.size() == 0) {
         setTextColor(RED);
@@ -595,6 +616,7 @@ void Program::printBookList() {
     _bookList.print();
 }
 
+// TODO: Bổ sung comment hàm
 void Program::updateBookPrice() {
     if (_bookList.size() == 0) {
         setTextColor(RED);
@@ -680,6 +702,7 @@ void Program::updateBookPrice() {
      cout << "≫ Đã thay đổi giá thành " << iPrice << "\n\n";
 }
 
+// TODO: Bổ sung comment hàm
 void Program::deleteBook() {
     if (_bookList.size() == 0) {
         setTextColor(RED);
@@ -744,6 +767,7 @@ void Program::deleteBook() {
     cout << "≫ Đã xóa thành công!" << endl;
 }
 
+// TODO: Bổ sung comment hàm
 void Program::sortBooksByIDAsc(bool notification) {
     if (_bookList.size() == 0) {
         setTextColor(RED);
@@ -767,6 +791,7 @@ void Program::sortBooksByIDAsc(bool notification) {
     }
 }
 
+// TODO: Bổ sung comment hàm
 void Program::sortBooksByPublicationYearDesc() {
     if (_bookList.size() == 0) {
         setTextColor(RED);
@@ -786,6 +811,7 @@ void Program::sortBooksByPublicationYearDesc() {
     cout << "≫ Danh sách đã được sắp xếp giảm dần theo năm xuất bản!\n";
 }
 
+// TODO: Bổ sung comment hàm
 void Program::sortBooksByTitleAsc() {
     if (_bookList.size() == 0) {
         setTextColor(RED);
@@ -802,6 +828,7 @@ void Program::sortBooksByTitleAsc() {
     cout << "≫ Danh sách đã được sắp xếp tăng dần theo tên sách!\n";
 }
 
+// TODO: Bổ sung comment hàm
 void Program::sortBooksByPriceDesc() {
     if (_bookList.size() == 0) {
         setTextColor(RED);
@@ -815,6 +842,7 @@ void Program::sortBooksByPriceDesc() {
     cout << "≫ Danh sách đã được sắp xếp giảm dần theo giá sách!\n";
 }
 
+// TODO: Bổ sung comment hàm
 void Program::displayMenu() {
     setTextColor(GREEN);
     cout << "-------------------Chương trình quản lý sách--------------------" << endl;
@@ -830,6 +858,7 @@ void Program::displayMenu() {
     cout << "----------------------------------------------------------------" << endl;
 }
 
+// TODO: Bổ sung comment hàm
 void Program::run() {
     setTextColor(WHITE);    
     SetConsoleOutputCP(CP_UTF8);    // Xuất được tiếng Việt
