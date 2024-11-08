@@ -478,9 +478,9 @@ ostream &operator << (ostream &out, Student other) {
 ****************************************************************************/
 int Program::countDigit(string input) {
     int iItem, iCount = 0;
-    stringstream inStream(input);
+    stringstream ssStream(input);
 
-    while (inStream >> iItem) 
+    while (ssStream >> iItem) 
         iCount++;   // Đếm số lượng phần tử hợp lệ
 
     return iCount;

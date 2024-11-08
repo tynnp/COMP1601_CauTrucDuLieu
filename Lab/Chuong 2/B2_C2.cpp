@@ -169,9 +169,9 @@ bool Array<DataType>::removeAll(DataType item) {
 ****************************************************************************/
 int Program::countDigit(string input) {
     int iItem, iCount = 0;
-    stringstream inStream(input);
+    stringstream ssStream(input);
 
-    while (inStream >> iItem) 
+    while (ssStream >> iItem) 
         iCount++;   // Đếm số lượng phần tử hợp lệ
 
     return iCount;
@@ -268,8 +268,8 @@ void Program::inputItemArray(int size) {
         }
     }
 
-    stringstream inStream(strInput);
-    while (inStream >> iItem)
+    stringstream ssStream(strInput);
+    while (ssStream >> iItem)
         _array.add(iItem);      // Thêm từng phần tử vào mảng
 }
 
