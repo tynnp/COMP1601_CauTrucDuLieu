@@ -4,10 +4,6 @@ Mã lớp học phần:
 Tên học phần: **Cấu trúc dữ liệu**.  
 Giảng viên:  
 
-**Hình thức học**:
-
-**Phân bố điểm**:
-
 ## Lưu trữ
 - **Ghi chú**:  
 - **Các bài Lab**: Thư mục [Lab](/Lab)  
