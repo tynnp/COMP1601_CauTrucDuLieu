@@ -84,7 +84,7 @@ private:
     int countDigit(string input);
     int selectOption();
     void endOption();
-    void inputNumber(int &num, const string &prompt);
+    int inputNumber(const string &prompt);
     void inputList(const int &size, const string &prompt);
     bool isPrime(int num);
     bool isPerfectSquare(int num);
@@ -650,9 +650,10 @@ void Program::endOption() {
 }
 
 // TODO: Viết comment cho hàm 
-void Program::inputNumber(int &num, const string &prompt) {
+int Program::inputNumber(const string &prompt) {
     char cKey;
     string strInput;
+    int iInput;
 
     setTextColor(BLUE);
     cout << prompt;
@@ -679,7 +680,8 @@ void Program::inputNumber(int &num, const string &prompt) {
         }
     }
 
-    num = stoi(strInput);
+    iInput = stoi(strInput);
+    return iInput;
 }
 
 // TODO: Viết comment cho hàm 
