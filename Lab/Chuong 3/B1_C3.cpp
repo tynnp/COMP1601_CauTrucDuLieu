@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include <cctype>
+#include <cmath>
 #include <string>
 #include <conio.h>
 #include <windows.h>
@@ -576,7 +577,7 @@ LinkedList<DataType> LinkedList<DataType>::sumLists(LinkedList<DataType> &other)
 
 // TODO: Viết comment cho hàm 
 void Program::displayMenu() {
-    // TODO: Định nghĩa cho menu
+    // TODO: Viết định nghĩa hàm
 }
 
 /***************************************************************************
@@ -614,7 +615,7 @@ int Program::selectOption() {
     while (true) {
         cKey = _getch();
 
-        if (isdigit(cKey) && stoi(strInput + cKey) >= 1 && stoi(strInput + cKey) <= 18) {
+        if (isdigit(cKey)) {
             cout << cKey;
             strInput += cKey;
         }
@@ -748,90 +749,90 @@ bool Program::isPerfect(int num) {
 
 // TODO: Viết comment cho hàm 
 void Program::run() {
-    // TODO: Định nghĩa cho hàm
+    // TODO: Viết định nghĩa cho hàm
 }
 
 // TODO: Viết comment cho hàm 
 void Program::addElements() {
-    // TODO: Định nghĩa cho hàm
+    // TODO: Viết định nghĩa cho hàm
 }
 
 // TODO: Viết comment cho hàm 
 void Program::displayList() {
-    // TODO: Định nghĩa cho hàm
+    // TODO: Viết định nghĩa cho hàm
 }
 
 // TODO: Viết comment cho hàm 
 void Program::listPrimes() {
-    // TODO: Định nghĩa cho hàm
+    // TODO: Viết định nghĩa cho hàm
 }
 
 // TODO: Viết comment cho hàm 
 void Program::calculateAverage() {
-    // TODO: Định nghĩa cho hàm
+    // TODO: Viết định nghĩa cho hàm
 }
 
 // TODO: Viết comment cho hàm 
 void Program::countElement() {
-    // TODO: Định nghĩa cho hàm
+    // TODO: Viết định nghĩa cho hàm
 }
 
 // TODO: Viết comment cho hàm 
 void Program::findLastPerfectSquare() {
-    // TODO: Định nghĩa cho hàm
+    // TODO: Viết định nghĩa cho hàm
 }
 
 // TODO: Viết comment cho hàm 
 void Program::findElementAtK() {
-    // TODO: Định nghĩa cho hàm
+    // TODO: Viết định nghĩa cho hàm
 }
 
 // TODO: Viết comment cho hàm 
 void Program::findMinElement() {
-    // TODO: Định nghĩa cho hàm
+    // TODO: Viết định nghĩa cho hàm
 }
 
 // TODO: Viết comment cho hàm 
 void Program::addElementAfterQ() {
-    // TODO: Định nghĩa cho hàm
+    // TODO: Viết định nghĩa cho hàm
 }
 
 // TODO: Viết comment cho hàm 
 void Program::addUniqueElement() {
-    // TODO: Định nghĩa cho hàm
+    // TODO: Viết định nghĩa cho hàm
 }
 
 // TODO: Viết comment cho hàm 
 void Program::removeFirstKElements() {
-    // TODO: Định nghĩa cho hàm
+    // TODO: Viết định nghĩa cho hàm
 }
 
 // TODO: Viết comment cho hàm 
 void Program::removeElementByValue() {
-    // TODO: Định nghĩa cho hàm
+    // TODO: Viết định nghĩa cho hàm
 }
 
 // TODO: Viết comment cho hàm 
 void Program::removeElementAfterQ() {
-    // TODO: Định nghĩa cho hàm
+    // TODO: Viết định nghĩa cho hàm
 }
 
 // TODO: Viết comment cho hàm 
 void Program::removeDuplicates() {
-    // TODO: Định nghĩa cho hàm
+    // TODO: Viết định nghĩa cho hàm
 }
 
 // TODO: Viết comment cho hàm 
 void Program::sortList() {
-    // TODO: Định nghĩa cho hàm
+    // TODO: Viết định nghĩa cho hàm
 }
 
 // TODO: Viết comment cho hàm 
 void Program::addElementToSorted() {
-    // TODO: Định nghĩa cho hàm
+    // TODO: Viết định nghĩa cho hàm
 }
 
 // TODO: Viết comment cho hàm 
 void Program::replacePerfectNumbers() {
-    // TODO: Định nghĩa cho hàm
+    // TODO: Viết định nghĩa cho hàm
 }
