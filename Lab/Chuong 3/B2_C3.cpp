@@ -756,42 +756,42 @@ void Program::run() {
     // TODO: Viết định nghĩa cho hàm
 }
 
-// Viết comment cho hàm
+// TODO: Viết comment cho hàm
 void Program::inputLists() {
     // TODO: Viết định nghĩa cho hàm
 }
 
-// Viết comment cho hàm
+// TODO: Viết comment cho hàm
 void Program::createCombinedList() {
     // TODO: Viết định nghĩa cho hàm
 }
 
-// Viết comment cho hàm
+// TODO: Viết comment cho hàm
 void Program::createDifferenceList() {
     // TODO: Viết định nghĩa cho hàm
 }
 
-// Viết comment cho hàm
+// TODO: Viết comment cho hàm
 void Program::createIntersectionList() {
     // TODO: Viết định nghĩa cho hàm
 }
 
-// Viết comment cho hàm
+// TODO: Viết comment cho hàm
 void Program::createUnionList() {
     // TODO: Viết định nghĩa cho hàm
 }
 
-// Viết comment cho hàm
+// TODO: Viết comment cho hàm
 void Program::createSumList() {
     // TODO: Viết định nghĩa cho hàm
 }
 
-// Viết comment cho hàm
+// TODO: Viết comment cho hàm
 void Program::removeFirstIfGreaterThanSumL2() {
     // TODO: Viết định nghĩa cho hàm
 }
 
-// Viết comment cho hàm
+// TODO: Viết comment cho hàm
 void Program::removeAllFromL1IfEqualToMaxInL2() {
     // TODO: Viết định nghĩa cho hàm
 }
