@@ -681,7 +681,16 @@ bool Monominal::display() {
 
 // TODO: Viết comment cho hàm 
 void Program::displayMenu() {
-    // TODO: Viết định nghĩa cho hàm
+    setTextColor(GREEN);
+    cout << "-----------------Chương trình danh sách liên kết đa thức----------------------" << endl;
+    cout << "1. Nhập 2 đa thức F1 và F2." << endl;
+    cout << "2. In 2 đa thức." << endl;
+    cout << "3. Tính đạo hàm 2 đa thức." << endl;
+    cout << "4. Tính giá trị 2 đa thức theo x." << endl;
+    cout << "5. Tạo danh sách là tổng 2 đa thức." << endl;
+    cout << "6. Tạo danh sách là tích 2 đa thức." << endl;
+    cout << "7. Thoát chương trình." << endl;
+    cout << "------------------------------------------------------------------------------" << endl;
 }
 
 /***************************************************************************
@@ -868,50 +877,335 @@ void Program::inputList(const int &size, const string &prompt, int option) {
 
 // TODO: Viết comment cho hàm
 void Program::displayPolynominal(LinkedList<Monominal> F) {
-    // TODO: Viết định nghĩa cho hàm
+    if (F.empty()) {
+        cout << "rỗng\n";
+        return;
+    }
+
+    bool bIsFirst = true;
+
+    for (int i = 0; i < F.size(); i++) {
+        if (bIsFirst) {
+            if (F.getAt(i).getCoefficient() < 0)
+                cout << '-';
+            if (F.getAt(i).display())
+                bIsFirst = false;
+
+        } else {
+            if (F.getAt(i).getCoefficient() < 0)
+                cout << " - ";
+            else if (F.getAt(i).getCoefficient() != 0)
+                cout << " + ";
+            F.getAt(i).display();
+        }
+    }
+
+    cout << endl;
 }
 
 // TODO: Viết comment cho hàm
 LinkedList<Monominal> Program::derivativePolynomial(LinkedList<Monominal> F) {
-    // TODO: Viết định nghĩa cho hàm
+    LinkedList<Monominal> result;
+
+    for (int i = 0; i < F.size(); i++) {
+        float fNewCoefficient = F.getAt(i).getCoefficient() * F.getAt(i).getExponent();
+        int iNewExponent = F.getAt(i).getExponent() - 1;
+
+        if (iNewExponent >= 0) {
+            Monominal deriveMonominal(fNewCoefficient, iNewExponent);
+            result.addBack(deriveMonominal);
+        }
+    }
+
+    return result;
 }
 
 // TODO: Viết comment cho hàm
 float Program::evaluatePolynomial(LinkedList<Monominal> F, float x) {
-    // TODO: Viết định nghĩa cho hàm
+    float fResult = 0;
+
+    for (int i = 0; i < F.size(); i++) 
+        fResult += F.getAt(i).getCoefficient() * pow(x, F.getAt(i).getExponent());
+    
+    return fResult;
 }
 
 // TODO: Viết comment cho hàm 
 void Program::run() {
-    // TODO: Viết định nghĩa cho hàm   
+    setTextColor(WHITE);
+    SetConsoleOutputCP(CP_UTF8);
+
+    int iMenuSelection = -1;
+    bool bPolynomialEntered = false;
+
+    while (iMenuSelection != 7) {
+        system("cls");
+        displayMenu();
+
+        setTextColor(BLUE);
+        cout << "≫ Nhập chức năng: ";
+
+        setTextColor(YELLOW);
+        iMenuSelection = selectOption();
+
+        switch (iMenuSelection) {
+            case 1: {
+                system("cls");
+
+                if (!bPolynomialEntered) {
+                    inputPolynominals();
+                    bPolynomialEntered = true;
+
+                } else {
+                    setTextColor(RED);
+                    cout << "≫ Đa thức đã được nhập!\n";
+                }
+
+                break;
+            }
+
+            case 2: {
+                system("cls");
+                displayPolynominals();
+                break;
+            }
+            
+            case 3: {
+                system("cls");
+                derivativePolynomials();
+                break;
+            }
+
+            case 4: {
+                system("cls");
+                evaluatePolynomials();
+                break;
+            }
+            
+            case 5: {
+                system("cls");
+                sumPolynomials();
+                break;
+            }
+
+            case 6: {
+                system("cls");
+                multiplyPolynomials();
+                break;
+            }
+
+            case 7: {
+                setTextColor(GREEN);
+                cout << "≫ Thoát chương trình...\n";
+                Sleep(3000);
+                setTextColor(WHITE);
+                return;
+            }
+        }
+
+        endOption();
+    }
 }
 
 // TODO: Viết comment cho hàm
 void Program::inputPolynominals() {
-    // TODO: Viết định nghĩa cho hàm
+    int iSizeF1, iSizeF2;
+
+    iSizeF1 = inputIntNumber("≫ Nhập số lượng đơn thức F1: ");
+    inputList(iSizeF1, "≫ Nhập hệ số và số mũ các đơn thức của F1: ", 1);
+
+    iSizeF2 = inputIntNumber("≫ Nhập số lượng đơn thức F2: ");
+    inputList(iSizeF2, "≫ Nhập hệ số và số mũ các đơn thức của F2: ", 2);
 }
 
 // TODO: Viết comment cho hàm
 void Program::displayPolynominals() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_F1.empty()) {
+        setTextColor(RED);
+        cout << "≫ Đa thức F1 không có phần tử!\n";
+    } else {
+        setTextColor(BLUE);
+        cout << "≫ Đa thức F1: ";
+        setTextColor(YELLOW);
+        displayPolynominal(_F1);
+    }
+
+    if (_F2.empty()) {
+        setTextColor(RED);
+        cout << "≫ Đa thức F2 không có phần tử!\n";
+    } else {
+        setTextColor(BLUE);
+        cout << "≫ Đa thức F2: ";
+        setTextColor(YELLOW);
+        displayPolynominal(_F2);
+    }
 }
 
 // TODO: Viết comment cho hàm
 void Program::derivativePolynomials() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_F1.empty()) {
+        setTextColor(RED);
+        cout << "≫ Đa thức F1 không có phần tử!\n";
+    } else {
+        setTextColor(BLUE);
+        cout << "≫ Đa thức F1: ";
+        setTextColor(YELLOW);
+        displayPolynominal(_F1);
+
+        setTextColor(BLUE);
+        cout << "≫ Đạo hàm F1: ";
+        setTextColor(YELLOW);
+        displayPolynominal(derivativePolynomial(_F1));
+    }
+
+    if (_F2.empty()) {
+        setTextColor(RED);
+        cout << "≫ Đa thức F2 không có phần tử!\n";
+    } else {
+        setTextColor(BLUE);
+        cout << "≫ Đa thức F2: ";
+        setTextColor(YELLOW);
+        displayPolynominal(_F2);
+
+        setTextColor(BLUE);
+        cout << "≫ Đạo hàm F2: ";
+        setTextColor(YELLOW);
+        displayPolynominal(derivativePolynomial(_F2));
+    }
 }
 
 // TODO: Viết comment cho hàm
 void Program::evaluatePolynomials() {
-    // TODO: Viết định nghĩa cho hàm
+    float fValueX = inputFloatNumber("≫ Nhập số thực x: ");
+
+    if (_F1.empty()) {
+        setTextColor(RED);
+        cout << "≫ Đa thức F1 không có phần tử!\n";
+    } else {
+        setTextColor(BLUE);
+        cout << "≫ Đa thức F1: ";
+        setTextColor(YELLOW);
+        displayPolynominal(_F1);
+
+        setTextColor(BLUE);
+        cout << "≫ Giá trị F1 theo x: ";
+        setTextColor(YELLOW);
+        cout << evaluatePolynomial(_F1, fValueX) << endl;
+    }
+
+    if (_F2.empty()) {
+        setTextColor(RED);
+        cout << "≫ Đa thức F2 không có phần tử!\n";
+    } else {
+        setTextColor(BLUE);
+        cout << "≫ Đa thức F2: ";
+        setTextColor(YELLOW);
+        displayPolynominal(_F2);
+
+       setTextColor(BLUE);
+        cout << "≫ Giá trị F2 theo x: ";
+        setTextColor(YELLOW);
+        cout << evaluatePolynomial(_F2, fValueX) << endl;
+    }
 }
 
 // TODO: Viết comment cho hàm
 void Program::sumPolynomials() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_F1.empty() && _F2.empty()) {
+        setTextColor(RED);
+        cout << "≫ Đa thức F1 và F2 đang rỗng!\n";
+        return;
+    }
+
+    LinkedList<Monominal> result;
+    int i = 0, j = 0;
+
+    while (i < _F1.size() && j < _F2.size()) {
+        if (_F1.getAt(i).getExponent() == _F2.getAt(j).getExponent()) {
+            float fNewCoefficient = _F1.getAt(i).getCoefficient() + _F2.getAt(j).getCoefficient();
+            if (fNewCoefficient != 0)
+                result.addBack(Monominal(fNewCoefficient, _F1.getAt(i).getExponent()));
+            i++, j++;
+
+        } else if (_F1.getAt(i).getExponent() > _F2.getAt(j).getExponent()) {
+            result.addBack(_F1.getAt(i));
+            i++;
+
+        } else {
+            result.addBack(_F2.getAt(j));
+            j++;
+        }
+    }
+
+    while (i < _F1.size()) {
+        result.addBack(_F1.getAt(i));
+        i++;
+    }
+
+    while (j < _F2.size()) {
+        result.addBack(_F2.getAt(j));
+        j++;
+    }
+
+    setTextColor(BLUE);
+    cout << "≫ Đa thức F1: ";
+    setTextColor(YELLOW);
+    displayPolynominal(_F1);
+
+    setTextColor(BLUE);
+    cout << "≫ Đa thức F2: ";
+    setTextColor(YELLOW);
+    displayPolynominal(_F2);
+
+    setTextColor(BLUE);
+    cout << "≫ Tổng 2 đa thức: ";
+    setTextColor(YELLOW);
+    displayPolynominal(result);
 }
 
 // TODO: Viết comment cho hàm
 void Program::multiplyPolynomials() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_F1.empty() && _F2.empty()) {
+        setTextColor(RED);
+        cout << "≫ Đa thức F1 và F2 đang rỗng!\n";
+        return;
+    }
+
+    LinkedList<Monominal> result;
+
+    for (int i = 0; i < _F1.size(); i++) {
+        for (int j = 0; j < _F2.size(); j++) {
+            float fNewCoefficient = _F1.getAt(i).getCoefficient() * _F2.getAt(j).getCoefficient();
+            int iNewExponent = _F1.getAt(i).getExponent() + _F2.getAt(j).getExponent();
+
+            Monominal newMonominal(fNewCoefficient, iNewExponent);
+            bool bMerged = false;
+
+            for (int k = 0; k < result.size(); k++) {
+                if (result.getAt(k).getExponent() == iNewExponent) {
+                    result.getAt(k).setCoefficient(result.getAt(k).getCoefficient() + fNewCoefficient);
+                    bMerged = true;
+                    break;
+                }
+            }
+
+            if (!bMerged) 
+                result.addBack(newMonominal);
+        }
+    }
+
+    setTextColor(BLUE);
+    cout << "≫ Đa thức F1: ";
+    setTextColor(YELLOW);
+    displayPolynominal(_F1);
+
+    setTextColor(BLUE);
+    cout << "≫ Đa thức F2: ";
+    setTextColor(YELLOW);
+    displayPolynominal(_F2);
+
+    setTextColor(BLUE);
+    cout << "≫ Tích 2 đa thức: ";
+    setTextColor(YELLOW);
+    displayPolynominal(result);
 }

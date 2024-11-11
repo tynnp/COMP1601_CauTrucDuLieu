@@ -577,7 +577,27 @@ LinkedList<DataType> LinkedList<DataType>::sumLists(LinkedList<DataType> &other)
 
 // TODO: Viết comment cho hàm 
 void Program::displayMenu() {
-    // TODO: Viết định nghĩa hàm
+    setTextColor(GREEN);
+    cout << "-----------------Chương trình danh sách liên kết đơn----------------------" << endl;
+    cout << "1. Thêm các phần tử vào danh sách liên kết đơn." << endl;
+    cout << "2. In danh sách liên kết đơn hiện tại." << endl;
+    cout << "3. In các số nguyên tố có trong danh sách." << endl;
+    cout << "4. Tính trung bình cộng các phần tử trong danh sách." << endl;
+    cout << "5. Đếm số lần xuất hiện của một phần tử trong danh sách." << endl;
+    cout << "6. Tìm số chính phương cuối cùng trong danh sách." << endl;
+    cout << "7. Tìm phần tử thứ K trong danh sách." << endl;
+    cout << "8. Tìm phần tử nhỏ nhất trong danh sách." << endl;
+    cout << "9. Thêm một phần tử sau phần tử Q trong danh sách." << endl;
+    cout << "10. Thêm một phần tử vào danh sách không trùng với phần tử đã có." << endl;
+    cout << "11. Xóa K phần tử ở đầu danh sách." << endl;
+    cout << "12. Xóa phần tử có giá trị bằng X trong danh sách." << endl;
+    cout << "13. Xóa một phần tử sau phần tử Q trong danh sách." << endl;
+    cout << "14. Xóa tất cả phần tử lặp lại trong danh sách." << endl; 
+    cout << "15. Sắp xếp danh sách tăng dần bằng thuật toán interchange sort." << endl;
+    cout << "16. Thêm một phần tử vào danh sách không mất tính tăng dần của danh sách." << endl;
+    cout << "17. Cập nhật các số hoàn thiện trong danh sách về 0." << endl;
+    cout << "18. Thoát chương trình." << endl;
+    cout << "--------------------------------------------------------------------------" << endl;
 }
 
 /***************************************************************************
@@ -598,9 +618,9 @@ void Program::setTextColor(int color) {
 ****************************************************************************/
 int Program::countDigit(string input) {
     int iItem, iCount = 0;
-    stringstream inStream(input);
+    stringstream ssStream(input);
 
-    while (inStream >> iItem) 
+    while (ssStream >> iItem) 
         iCount++;   // Đếm số lượng phần tử hợp lệ
 
     return iCount;
@@ -615,7 +635,7 @@ int Program::selectOption() {
     while (true) {
         cKey = _getch();
 
-        if (isdigit(cKey)) {
+        if (isdigit(cKey) && stoi(strInput + cKey) >= 1 && stoi(strInput + cKey) <= 18) {
             cout << cKey;
             strInput += cKey;
         }
@@ -749,90 +769,459 @@ bool Program::isPerfect(int num) {
 
 // TODO: Viết comment cho hàm 
 void Program::run() {
-    // TODO: Viết định nghĩa cho hàm
+    setTextColor(WHITE);
+    SetConsoleOutputCP(CP_UTF8);
+
+    int iMenuSelection = -1;
+
+    while (iMenuSelection != 18) {
+        system("cls");
+        displayMenu();
+
+        setTextColor(BLUE);
+        cout << "≫ Nhập chức năng: ";
+
+        setTextColor(YELLOW);
+        iMenuSelection = selectOption();
+
+        switch (iMenuSelection) {
+            case 1: {
+                system("cls");
+                addElements();
+                break;
+            }
+
+            case 2: {
+                system("cls");
+                displayList();
+                break;
+            }
+
+            case 3: {
+                system("cls");
+                listPrimes();
+                break;
+            }
+
+            case 4: {
+                system("cls");
+                calculateAverage();
+                break;
+            }
+
+            case 5: {
+                system("cls");
+                countElement();
+                break;
+            }
+
+            case 6: {
+                system("cls");
+                findLastPerfectSquare();
+                break;
+            }
+
+            case 7: {
+                system("cls");
+                findElementAtK();
+                break;
+            }
+
+            case 8: {
+                system("cls");
+                findMinElement();
+                break;
+            }
+
+            case 9: {
+                system("cls");
+                addElementAfterQ();
+                break;
+            }
+
+            case 10: {
+                system("cls");
+                addUniqueElement();
+                break;
+            }
+
+            case 11: {
+                system("cls");
+                removeFirstKElements();
+                break;
+            }
+
+            case 12: {
+                system("cls");
+                removeElementByValue();
+                break;
+            }
+            
+            case 13: {
+                system("cls");
+                removeElementAfterQ();
+                break;
+            }
+            
+            case 14: {
+                system("cls");
+                removeDuplicates();
+                break;
+            }
+            
+            case 15: {
+                system("cls");
+                sortList();
+                break;
+            }
+            
+            case 16: {
+                system("cls");
+                addElementToSorted();
+                break;
+            }
+            
+            case 17: {
+                system("cls");
+                replacePerfectNumbers();
+                break;      
+            }
+            
+            case 18: {
+                setTextColor(GREEN);
+                cout << "≫ Thoát chương trình...\n";
+                Sleep(3000);
+                setTextColor(WHITE);
+                return;
+            }
+        }
+
+        endOption();
+    }
 }
 
 // TODO: Viết comment cho hàm 
 void Program::addElements() {
-    // TODO: Viết định nghĩa cho hàm
+    int iSize = inputNumber("≫ Nhập số lượng phần tử cần thêm: ");
+    inputList(iSize, "≫ Nhập các phần tử cần thêm: ");
+    setTextColor(GREEN);
+    cout << "≫ Đã thêm thành công!\n";
 }
 
 // TODO: Viết comment cho hàm 
 void Program::displayList() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_list.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách hiện tại đang trống!\n";
+        return;
+    }
+
+    setTextColor(BLUE);
+    cout << "≫ Danh sách hiện tại: ";
+    setTextColor(YELLOW);
+    _list.display();
 }
 
 // TODO: Viết comment cho hàm 
 void Program::listPrimes() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_list.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách hiện tại đang trống!\n";
+        return;
+    }
+
+    bool bCheck = false;
+    setTextColor(BLUE);
+    cout << "≫ Các số nguyên tố có trong danh sách: ";
+
+    setTextColor(YELLOW);
+    for (int i = 0; i < _list.size(); i++) {
+        if (isPrime(_list.getAt(i))) {
+            cout << _list.getAt(i) << ' ';
+            bCheck = true;
+        }
+    }
+
+    if (!bCheck) 
+        cout << "Không có số nguyên tố nào!";
+    cout << endl;
 }
 
 // TODO: Viết comment cho hàm 
 void Program::calculateAverage() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_list.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách hiện tại đang trống!\n";
+        return;
+    }
+
+    float fResult = 0;
+    for (int i = 0; i < _list.size(); i++) 
+        fResult += _list.getAt(i);
+    
+    fResult /= _list.size();
+    
+    setTextColor(BLUE);
+    cout << "≫ Trung bình cộng các phần tử trong danh sách: ";
+
+    setTextColor(YELLOW);
+    cout << fResult << endl;
 }
 
 // TODO: Viết comment cho hàm 
 void Program::countElement() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_list.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách hiện tại đang trống!\n";
+        return;
+    }
+
+    int iElement, iCount = 0;
+    iElement = inputNumber("≫ Nhập phần tử cần đếm số lần xuất hiện: ");
+
+    setTextColor(BLUE);
+    cout << "≫ Số lần xuất hiện của " << iElement << " là ";
+    setTextColor(YELLOW);
+    cout << _list.count(iElement) << endl;
 }
 
 // TODO: Viết comment cho hàm 
 void Program::findLastPerfectSquare() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_list.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách hiện tại đang trống!\n";
+        return;
+    }
+
+    int iResult = -1;
+    for (int i = 0; i < _list.size(); i++) 
+        if (isPerfectSquare(_list.getAt(i)))
+            iResult = _list.getAt(i);
+    
+    setTextColor(BLUE);
+    cout << "≫ Số chính phương cuối cùng của danh sách: ";
+
+    setTextColor(YELLOW);
+    if (iResult == -1)  
+        cout << "Không có tìm thấy số chính phương!";
+    else 
+        cout << iResult;
+    cout << endl;
 }
 
 // TODO: Viết comment cho hàm 
 void Program::findElementAtK() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_list.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách hiện tại đang trống!\n";
+        return;
+    }
+
+    int iIndexK = inputNumber("Nhập vị trí K (bắt đầu từ 0): ");
+
+    if (iIndexK < 0) {
+        setTextColor(RED);
+        cout << "≫ Vị trí K không hợp lệ!";
+        return;
+    }
+
+    if (iIndexK >= _list.size()) {
+        setTextColor(RED);
+        cout << "≫ Vị trí K vượt quá số lượng phần tử danh sách!\n";
+        return;
+    }
+
+    setTextColor(BLUE);
+    cout << "≫ Phần tử thứ K là: ";
+    setTextColor(YELLOW);
+    cout << _list.getAt(iIndexK) << endl;
 }
 
 // TODO: Viết comment cho hàm 
 void Program::findMinElement() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_list.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách hiện tại đang trống!\n";
+        return;
+    }
+
+    int iResult = _list.getAt(0);
+    for (int i = 1; i < _list.size(); i++)
+        if (_list.getAt(i) < iResult)
+            iResult = _list.getAt(i);
+    
+    setTextColor(BLUE);
+    cout << "≫ Phần tử nhỏ nhất trong danh sách là: ";
+    setTextColor(YELLOW);
+    cout << iResult << endl;
 }
 
 // TODO: Viết comment cho hàm 
 void Program::addElementAfterQ() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_list.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách hiện tại đang trống!\n";
+        return;
+    }
+
+    int iElementQ, iElementAdd;
+    iElementQ = inputNumber("≫ Nhập giá trị phần tử Q: ");
+
+    int iIndexQ = _list.find(iElementQ);
+    if (iIndexQ == -1) {
+        setTextColor(RED);
+        cout << "≫ Không tìm thấy phần tử Q!\n";
+        return;
+    }
+
+    iElementAdd = inputNumber("≫ Nhập phần tử cần thêm sau Q: ");
+    _list.insertAt(iIndexQ + 1, iElementAdd);
+
+    setTextColor(GREEN);
+    cout << "≫ Đã thêm thành công!\n";
 }
 
 // TODO: Viết comment cho hàm 
 void Program::addUniqueElement() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_list.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách hiện tại đang trống!\n";
+        return;
+    }
+
+    int iElementAdd = inputNumber("≫ Nhập phần tử cần thêm: ");
+
+    if (!_list.contains(iElementAdd))
+        _list.addBack(iElementAdd);
+
+    setTextColor(GREEN);
+    cout << "≫ Đã thêm thành công!\n";
 }
 
 // TODO: Viết comment cho hàm 
 void Program::removeFirstKElements() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_list.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách hiện tại đang trống!\n";
+        return;
+    }
+
+    int iKNumber = inputNumber("≫ Nhập giá trị K: ");
+    
+    if (iKNumber <= 0) {
+        setTextColor(RED);
+        cout << "≫ K không hợp lệ!\n";
+        return;
+    }
+
+    if (iKNumber > _list.size()) {
+        setTextColor(RED);
+        cout << "≫ K vượt quá số lượng phần tử của danh sách!\n";
+        return;
+    }
+
+    while (iKNumber--) 
+        _list.removeAt(0);
+    
+    setTextColor(GREEN);
+    cout << "≫ Đã xóa K phần tử đầu tiên thành công!\n";
 }
 
 // TODO: Viết comment cho hàm 
 void Program::removeElementByValue() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_list.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách hiện tại đang trống!\n";
+        return;
+    }
+
+    int iElementX = inputNumber("≫ Nhập giá trị X cần xóa: ");
+
+    int iIndexX = _list.find(iElementX);
+    if (iIndexX == -1) {
+        setTextColor(RED);
+        cout << "≫ Không tìm thấy X trong danh sách!\n";
+        return;
+    }
+
+    _list.removeAt(iIndexX);
+    setTextColor(GREEN);
+    cout << "≫ Đã xóa X thành công!\n";
 }
 
 // TODO: Viết comment cho hàm 
 void Program::removeElementAfterQ() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_list.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách hiện tại đang trống!\n";
+        return;
+    }
+
+    int iElementQ = inputNumber("≫ Nhập giá trị phần tử Q: ");
+
+    int iIndexQ = _list.find(iElementQ);
+    if (iIndexQ == -1) {
+        setTextColor(RED);
+        cout << "≫ Không tìm thấy phần tử Q!\n";
+        return;
+    }
+
+    if (iIndexQ + 1 < _list.size())
+        _list.removeAt(iIndexQ + 1);
+
+    setTextColor(GREEN);
+    cout << "≫ Đã xóa thành công!\n";
 }
 
 // TODO: Viết comment cho hàm 
 void Program::removeDuplicates() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_list.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách hiện tại đang trống!\n";
+        return;
+    }
+
+    _list.unique();
+    setTextColor(GREEN);
+    cout << "≫ Đã xóa các phần tử trùng nhau thành công!\n";
 }
 
 // TODO: Viết comment cho hàm 
 void Program::sortList() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_list.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách hiện tại đang trống!\n";
+        return;
+    }
+
+    _list.sortAsc();
+    setTextColor(GREEN);
+    cout << "≫ Đã sắp xếp thành công!\n";
 }
 
 // TODO: Viết comment cho hàm 
 void Program::addElementToSorted() {
-    // TODO: Viết định nghĩa cho hàm
+    int iElementAdd = inputNumber("≫ Nhập phần tử cần thêm: ");
+
+    _list.addBack(iElementAdd);
+    _list.sortAsc();
+
+    setTextColor(GREEN);
+    cout << "≫ Đã thêm thành công!\n";
 }
 
 // TODO: Viết comment cho hàm 
 void Program::replacePerfectNumbers() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_list.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách hiện tại đang trống!\n";
+        return;
+    }
+    
+    for (int i = 0; i < _list.size(); i++) 
+        if (isPerfect(_list.getAt(i)))
+            _list.setAt(i, 0);
+
+    setTextColor(GREEN);
+    cout << "≫ Đã cập nhật các số hoàn thiện trong danh sách thành 0.\n";
 }

@@ -599,7 +599,18 @@ LinkedList<DataType> &LinkedList<DataType>::operator = (const LinkedList<DataTyp
 
 // TODO: Viết comment cho hàm 
 void Program::displayMenu() {
-    // TODO: Viết định nghĩa cho hàm
+    setTextColor(GREEN);
+    cout << "-----------------Chương trình danh sách liên kết đơn----------------------" << endl;
+    cout << "1. Nhập thêm phần tử vào L1 và L2." << endl;
+    cout << "2. Tạo danh sách L3 bằng cách nối L1 vào L2." << endl;
+    cout << "3. Tạo L3 là hiệu của L1 và L2." << endl;
+    cout << "4. Tạo L3 là giao của L1 và L2." << endl;
+    cout << "5. Tạo L3 là hợp của L1 và L2." << endl;
+    cout << "6. Tạo L3 là tổng từng phần tử của L1 và L2." << endl;
+    cout << "7. Xóa phần tử đầu tiên của L1 có giá trị lớn hơn tổng các phần tử L2." << endl;
+    cout << "8. Xóa các phần tử trong L1 có giá trị bằng giá trị lớn nhất của L2." << endl;
+    cout << "9. Thoát chương trình." << endl;
+    cout << "--------------------------------------------------------------------------" << endl;
 }
 
 /***************************************************************************
@@ -620,9 +631,9 @@ void Program::setTextColor(int color) {
 ****************************************************************************/
 int Program::countDigit(string input) {
     int iItem, iCount = 0;
-    stringstream inStream(input);
+    stringstream ssStream(input);
 
-    while (inStream >> iItem) 
+    while (ssStream >> iItem) 
         iCount++;   // Đếm số lượng phần tử hợp lệ
 
     return iCount;
@@ -637,7 +648,7 @@ int Program::selectOption() {
     while (true) {
         cKey = _getch();
 
-        if (isdigit(cKey)) {
+        if (isdigit(cKey) && stoi(strInput + cKey) >= 1 && stoi(strInput + cKey) <= 9) {
             cout << cKey;
             strInput += cKey;
         }
@@ -753,45 +764,417 @@ void Program::inputList(const int &size, const string &prompt, int option) {
 
 // TODO: Viết comment cho hàm 
 void Program::run() {
-    // TODO: Viết định nghĩa cho hàm
+    setTextColor(WHITE);
+    SetConsoleOutputCP(CP_UTF8);
+
+    int iMenuSelection = -1;
+
+    while (iMenuSelection != 9) {
+        system("cls");
+        displayMenu();
+
+        setTextColor(BLUE);
+        cout << "≫ Nhập chức năng: ";
+
+        setTextColor(YELLOW);
+        iMenuSelection = selectOption();
+
+        switch (iMenuSelection) {
+            case 1: {
+                system("cls");
+                inputLists();
+                break;
+            }
+
+            case 2: {
+                system("cls");
+                createCombinedList();
+                break;
+            }
+
+            case 3: {
+                system("cls");
+                createDifferenceList();
+                break;
+            }
+
+            case 4: {
+                system("cls");
+                createIntersectionList();
+                break;
+            }
+
+            case 5: {
+                system("cls");
+                createUnionList();
+                break;
+            }
+
+            case 6: {
+                system("cls");
+                createSumList();
+                break;
+            }
+
+            case 7: {
+                system("cls");
+                removeFirstIfGreaterThanSumL2();
+                break;
+            }
+
+            case 8: {
+                system("cls");
+                removeAllFromL1IfEqualToMaxInL2();
+                break;
+            }
+            
+            case 9: {
+                setTextColor(GREEN);
+                cout << "≫ Thoát chương trình...\n";
+                Sleep(3000);
+                setTextColor(WHITE);
+                return;
+            }
+        }
+
+        endOption();
+    }
 }
 
-// TODO: Viết comment cho hàm
+// Viết comment cho hàm
 void Program::inputLists() {
-    // TODO: Viết định nghĩa cho hàm
+    int iSizeL1, iSizeL2;
+
+    iSizeL1 = inputNumber("≫ Nhập số lượng phần tử thêm vào L1: ");
+    inputList(iSizeL1, "≫ Nhập các phần tử thêm vào L1: ", 1);
+
+    iSizeL2 = inputNumber("≫ Nhập số lượng phần tử thêm vào L2: ");
+    inputList(iSizeL2, "≫ Nhập các phần tử thêm vào L2: ", 2);
 }
 
-// TODO: Viết comment cho hàm
+// Viết comment cho hàm
 void Program::createCombinedList() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_L1.empty() && _L2.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách L1 và L2 đang rỗng!\n";
+        return;
+    }
+
+    if (_L1.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách L1 đang rỗng!\n";
+        return;
+    }
+
+    if (_L2.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách L2 đang rỗng!\n";
+        return;
+    }
+
+    LinkedList<int> result = _L1;
+
+    for (int i = 0; i < _L2.size(); i++)
+        result.addBack(_L2.getAt(i));
+
+    setTextColor(BLUE);
+    cout << "≫ Danh sách L1: "; 
+    setTextColor(YELLOW);
+    _L1.display();
+
+    setTextColor(BLUE);
+    cout << "≫ Danh sách L2: "; 
+    setTextColor(YELLOW);
+    _L2.display();
+
+    setTextColor(BLUE);
+    cout << "≫ Danh sách L3: ";
+    
+    setTextColor(YELLOW);
+    if (result.empty())
+        cout << "rỗng\n";
+    else 
+        result.display();
 }
 
-// TODO: Viết comment cho hàm
+// Viết comment cho hàm
 void Program::createDifferenceList() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_L1.empty() && _L2.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách L1 và L2 đang rỗng!\n";
+        return;
+    }
+
+    if (_L1.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách L1 đang rỗng!\n";
+        return;
+    }
+
+    if (_L2.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách L2 đang rỗng!\n";
+        return;
+    }
+
+    LinkedList<int> result = _L1.differenceWith(_L2);
+
+    setTextColor(BLUE);
+    cout << "≫ Danh sách L1: "; 
+    setTextColor(YELLOW);
+    _L1.display();
+
+    setTextColor(BLUE);
+    cout << "≫ Danh sách L2: "; 
+    setTextColor(YELLOW);
+    _L2.display();
+
+    setTextColor(BLUE);
+    cout << "≫ Danh sách L3: ";
+    
+    setTextColor(YELLOW);
+    if (result.empty())
+        cout << "rỗng\n";
+    else 
+        result.display();
 }
 
-// TODO: Viết comment cho hàm
+// Viết comment cho hàm
 void Program::createIntersectionList() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_L1.empty() && _L2.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách L1 và L2 đang rỗng!\n";
+        return;
+    }
+
+    if (_L1.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách L1 đang rỗng!\n";
+        return;
+    }
+
+    if (_L2.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách L2 đang rỗng!\n";
+        return;
+    }
+
+    LinkedList<int> result = _L1.intersectWith(_L2);
+
+    setTextColor(BLUE);
+    cout << "≫ Danh sách L1: "; 
+    setTextColor(YELLOW);
+    _L1.display();
+
+    setTextColor(BLUE);
+    cout << "≫ Danh sách L2: "; 
+    setTextColor(YELLOW);
+    _L2.display();
+
+    setTextColor(BLUE);
+    cout << "≫ Danh sách L3: ";
+    
+    setTextColor(YELLOW);
+    if (result.empty())
+        cout << "rỗng\n";
+    else 
+        result.display();
 }
 
-// TODO: Viết comment cho hàm
+// Viết comment cho hàm
 void Program::createUnionList() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_L1.empty() && _L2.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách L1 và L2 đang rỗng!\n";
+        return;
+    }
+
+    if (_L1.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách L1 đang rỗng!\n";
+        return;
+    }
+
+    if (_L2.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách L2 đang rỗng!\n";
+        return;
+    }
+
+    LinkedList<int> result = _L1.unionWith(_L2);
+
+    setTextColor(BLUE);
+    cout << "≫ Danh sách L1: "; 
+    setTextColor(YELLOW);
+    _L1.display();
+
+    setTextColor(BLUE);
+    cout << "≫ Danh sách L2: "; 
+    setTextColor(YELLOW);
+    _L2.display();
+
+    setTextColor(BLUE);
+    cout << "≫ Danh sách L3: ";
+    
+    setTextColor(YELLOW);
+    if (result.empty())
+        cout << "rỗng\n";
+    else 
+        result.display();
 }
 
-// TODO: Viết comment cho hàm
+// Viết comment cho hàm
 void Program::createSumList() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_L1.empty() && _L2.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách L1 và L2 đang rỗng!\n";
+        return;
+    }
+
+    if (_L1.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách L1 đang rỗng!\n";
+        return;
+    }
+
+    if (_L2.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách L2 đang rỗng!\n";
+        return;
+    }
+
+    LinkedList<int> result = _L1.sumLists(_L2);
+
+    setTextColor(BLUE);
+    cout << "≫ Danh sách L1: "; 
+    setTextColor(YELLOW);
+    _L1.display();
+
+    setTextColor(BLUE);
+    cout << "≫ Danh sách L2: "; 
+    setTextColor(YELLOW);
+    _L2.display();
+
+    setTextColor(BLUE);
+    cout << "≫ Danh sách L3: ";
+    
+    setTextColor(YELLOW);
+    if (result.empty())
+        cout << "rỗng\n";
+    else 
+        result.display();
 }
 
-// TODO: Viết comment cho hàm
+// Viết comment cho hàm
 void Program::removeFirstIfGreaterThanSumL2() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_L1.empty() && _L2.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách L1 và L2 đang rỗng!\n";
+        return;
+    }
+
+    if (_L1.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách L1 đang rỗng!\n";
+        return;
+    }
+
+    if (_L2.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách L2 đang rỗng!\n";
+        return;
+    }
+
+    int iSumL2 = 0;
+    bool bDeleted = false;
+
+    for (int i = 0; i < _L2.size(); i++)
+        iSumL2 += _L2.getAt(i);
+
+    int iIndexL1 = 0;
+    while (iIndexL1 < _L1.size()) {
+        if (_L1.getAt(iIndexL1) > iSumL2) {
+            _L1.removeAt(iIndexL1);
+            bDeleted = true;
+            break;
+        }
+
+        iIndexL1++;
+    }
+
+    if (bDeleted) {
+        setTextColor(GREEN);
+        cout << "≫ Đã xóa thành công!\n";
+
+    } else {
+        setTextColor(RED);
+        cout << "≫ Không có phần tử nào thỏa mãn!\n";
+    }
+
+    setTextColor(BLUE);
+    cout << "≫ Danh sách L1: "; 
+    setTextColor(YELLOW);
+    _L1.display();
+
+    setTextColor(BLUE);
+    cout << "≫ Danh sách L2: "; 
+    setTextColor(YELLOW);
+    _L2.display();
 }
 
-// TODO: Viết comment cho hàm
+// Viết comment cho hàm
 void Program::removeAllFromL1IfEqualToMaxInL2() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_L1.empty() && _L2.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách L1 và L2 đang rỗng!\n";
+        return;
+    }
+
+    if (_L1.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách L1 đang rỗng!\n";
+        return;
+    }
+
+    if (_L2.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách L2 đang rỗng!\n";
+        return;
+    }
+
+    int iMaxL2 = INT_MIN;
+    for (int i = 0; i < _L2.size(); i++)
+        if (iMaxL2 < _L2.getAt(i))
+            iMaxL2 = _L2.getAt(i);
+
+    int iIndexL1 = 0;
+    bool bDeleted = false;
+
+    while (iIndexL1 < _L1.size()) {
+        if (_L1.getAt(iIndexL1) == iMaxL2) {
+            _L1.removeAt(iIndexL1);
+            bDeleted = true;
+
+        } else 
+            iIndexL1++;
+    }
+
+    if (bDeleted) {
+        setTextColor(GREEN);
+        cout << "≫ Đã xóa thành công!\n";
+
+    } else {
+        setTextColor(RED);
+        cout << "≫ Không có phần tử nào thỏa mãn!\n";
+    }
+
+    setTextColor(BLUE);
+    cout << "≫ Danh sách L1: "; 
+    setTextColor(YELLOW);
+    _L1.display();
+
+    setTextColor(BLUE);
+    cout << "≫ Danh sách L2: "; 
+    setTextColor(YELLOW);
+    _L2.display();
 }

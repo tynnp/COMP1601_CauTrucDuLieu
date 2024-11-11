@@ -686,7 +686,15 @@ void Char::display() {
 
 // TODO: Viết comment cho hàm 
 void Program::displayMenu() {
-
+    setTextColor(GREEN);
+    cout << "-----------------Chương trình danh sách liên kết đơn----------------------" << endl;
+    cout << "1. Nhập thêm int vào danh sách." << endl;
+    cout << "2. Nhập thêm string vào danh sách." << endl;
+    cout << "3. Nhập thêm float vào danh sách." << endl;
+    cout << "4. Nhập thêm char vào danh sách." << endl;
+    cout << "5. Xem danh sách." << endl;
+    cout << "6. Thoát chương trình." << endl;
+    cout << "--------------------------------------------------------------------------" << endl;
 }
 
 /***************************************************************************
@@ -792,50 +800,263 @@ int Program::inputNumber(const string &prompt) {
 
 // TODO: Viết comment cho hàm 
 void Program::inputIntList(const int &size, const string &prompt) {
-    // TODO: Viết định nghĩa cho hàm
+    char cKey;
+    string strInput;
+
+    setTextColor(BLUE);
+    cout << prompt;
+
+    setTextColor(YELLOW);
+    while (true) {
+        cKey = _getch();
+
+        if ((isdigit(cKey) || (cKey == ' ' && strInput.back() != '-') || (cKey == '-' && (strInput.empty() || strInput.back() == ' '))) && countElementInput(strInput + cKey) <= size) {
+            cout << cKey;
+            strInput += cKey;
+        }
+
+        else if (cKey == 8) {
+            if (!strInput.empty()) {
+                cout << "\b \b";
+                strInput.pop_back();
+            }
+        }
+
+        else if (cKey == '\r' && countElementInput(strInput) > 0) { 
+            cout << endl;
+            break;
+        }
+    }
+
+    int iElement;
+    stringstream ssStream(strInput);
+    while (ssStream >> iElement) {
+        Base* iElementAdd = new Int(iElement);
+        _list.addBack(iElementAdd);
+    }
+
+
+    setTextColor(GREEN);
+    cout << "≫ Đã thêm thành công!\n";
 }
 
 // TODO: Viết comment cho hàm 
 void Program::inputStringList(const int &size, const string &prompt) {
-    // TODO: Viết định nghĩa cho hàm
+    char cKey;
+    string strInput;
+
+    setTextColor(BLUE);
+    cout << prompt;
+
+    setTextColor(YELLOW);
+    while (true) {
+        cKey = _getch();
+
+        if ((isalnum(cKey) || ispunct(cKey) || cKey == ' ') && countElementInput(strInput + cKey) <= size) {
+            cout << cKey;
+            strInput += cKey;
+        }
+
+        else if (cKey == 8) {
+            if (!strInput.empty()) {
+                cout << "\b \b";
+                strInput.pop_back();
+            }
+        }
+
+        else if (cKey == '\r' && countElementInput(strInput) > 0) { 
+            cout << endl;
+            break;
+        }
+    }
+
+    string strElement;
+    stringstream ssStream(strInput);
+    while (ssStream >> strElement) {
+        Base* strElementAdd = new String(strElement);
+        _list.addBack(strElementAdd);
+    }
+
+
+    setTextColor(GREEN);
+    cout << "≫ Đã thêm thành công!\n";
 }
 
 // TODO: Viết comment cho hàm 
 void Program::inputFloatList(const int &size, const string &prompt) {
-    // TODO: Viết định nghĩa cho hàm
+    char cKey;
+    string strInput;
+
+    setTextColor(BLUE);
+    cout << prompt;
+
+    setTextColor(YELLOW);
+    while (true) {
+        cKey = _getch();
+
+        if ((isdigit(cKey) || (isdigit(strInput.back()) && cKey == '.') || (cKey == ' ' && strInput.back() != '-') || (cKey == '-' && (strInput.empty() || strInput.back() == ' '))) && countElementInput(strInput + cKey) <= size) {
+            cout << cKey;
+            strInput += cKey;
+        }
+
+        else if (cKey == 8) {
+            if (!strInput.empty()) {
+                cout << "\b \b";
+                strInput.pop_back();
+            }
+        }
+
+        else if (cKey == '\r' && countElementInput(strInput) > 0) { 
+            cout << endl;
+            break;
+        }
+    }
+
+    float fElement;
+    stringstream ssStream(strInput);
+    while (ssStream >> fElement) {
+        Base* fElementAdd = new Float(fElement);
+        _list.addBack(fElementAdd);
+    }
+
+
+    setTextColor(GREEN);
+    cout << "≫ Đã thêm thành công!\n";
 }
 
 // TODO: Viết comment cho hàm 
 void Program::inputCharList(const int &size, const string &prompt) {
-    // TODO: Viết định nghĩa cho hàm
+    char cKey;
+    string strInput;
+
+    setTextColor(BLUE);
+    cout << prompt;
+
+    setTextColor(YELLOW);
+    while (true) {
+        cKey = _getch();
+
+        if (((cKey != ' ' && (strInput.empty() || strInput.back() == ' ')) || (cKey == ' ' && strInput.back() != ' ')) && countElementInput(strInput) < size) {
+            cout << cKey;
+            strInput += cKey;
+        }
+
+        else if (cKey == 8) {
+            if (!strInput.empty()) {
+                cout << "\b \b";
+                strInput.pop_back();
+            }
+        }
+
+        else if (cKey == '\r' && countElementInput(strInput) > 0) { 
+            cout << endl;
+            break;
+        }
+    }
+
+    char cElement;
+    stringstream ssStream(strInput);
+    while (ssStream >> cElement) {
+        Base* cElementAdd = new Char(cElement);
+        _list.addBack(cElementAdd);
+    }
+
+    setTextColor(GREEN);
+    cout << "≫ Đã thêm thành công!\n";
 }
 
 // TODO: Viết comment cho hàm 
 void Program::run() {
-    // TODO: Viết định nghĩa cho hàm
+    setTextColor(WHITE);
+    SetConsoleOutputCP(CP_UTF8);
+
+    int iMenuSelection = -1;
+
+    while (iMenuSelection != 6) {
+        system("cls");
+        displayMenu();
+
+        setTextColor(BLUE);
+        cout << "≫ Nhập chức năng: ";
+
+        setTextColor(YELLOW);
+        iMenuSelection = selectOption();
+
+        switch (iMenuSelection) {
+            case 1: {
+                system("cls");
+                inputIntLists();
+                break;
+            }
+
+            case 2: {
+                system("cls");
+                inputStringLists();
+                break;
+            }
+            
+            case 3: {
+                system("cls");
+                inputFloatLists();
+                break;
+            }
+            
+            case 4: {
+                system("cls");
+                inputCharLists();
+                break;
+            }
+
+            case 5: {
+                system("cls");
+                displayList();
+                break;
+            }
+
+            case 6: {
+                setTextColor(GREEN);
+                cout << "≫ Thoát chương trình...\n";
+                Sleep(3000);
+                setTextColor(WHITE);
+                return;
+            }
+        }
+
+        endOption();
+    }
 }
 
 // TODO: Viết comment cho hàm
 void Program::inputIntLists() {
-    // TODO: Viết định nghĩa cho hàm
+    int iSize = inputNumber("≫ Nhập số lượng phần tử cần thêm: ");
+    inputIntList(iSize, "≫ Nhập các phần tử kiểu int muốn thêm: ");
 }
 
 // TODO: Viết comment cho hàm
 void Program::inputStringLists() {
-    // TODO: Viết định nghĩa cho hàm
+    int iSize = inputNumber("≫ Nhập số lượng phần tử cần thêm: ");
+    inputStringList(iSize, "≫ Nhập các phần tử kiểu string muốn thêm: ");
 }
 
 // TODO: Viết comment cho hàm
 void Program::inputFloatLists() {
-    // TODO: Viết định nghĩa cho hàm
+    int iSize = inputNumber("≫ Nhập số lượng phần tử cần thêm: ");
+    inputFloatList(iSize, "≫ Nhập các phần tử kiểu float muốn thêm: ");
 }
 
 // TODO: Viết comment cho hàm
 void Program::inputCharLists() {
-    // TODO: Viết định nghĩa cho hàm
+    int iSize = inputNumber("≫ Nhập số lượng phần tử cần thêm: ");
+    inputCharList(iSize, "≫ Nhập các phần tử kiểu char muốn thêm: ");
 }
 
 // TODO: Viết comment cho hàm
 void Program::displayList() {
-    // TODO: Viết định nghĩa cho hàm
+    if (_list.empty()) {
+        setTextColor(RED);
+        cout << "≫ Danh sách hiện tại đang rỗng!\n";
+        return;
+    }
+
+    _list.display();
 }
