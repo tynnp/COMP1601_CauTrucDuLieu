@@ -5,7 +5,6 @@ Tên học phần: **Cấu trúc dữ liệu**.
 Giảng viên:  
 
 ## Lưu trữ
-- **Ghi chú**:  
 - **Các bài Lab**: Thư mục [Lab](/Lab)  
 - **Đồ án**:  
 - **Khác**: Thư mục [Khac](/Khac/)
